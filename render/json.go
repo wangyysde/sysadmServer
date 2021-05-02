@@ -25,8 +25,8 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/gin-gonic/gin/internal/bytesconv"
-	"github.com/gin-gonic/gin/internal/json"
+	"github.com/wangyysde/sysadmServer/internal/bytesconv"
+	"github.com/wangyysde/sysadmServer/internal/json"
 )
 
 // JSON contains the given interface object.
