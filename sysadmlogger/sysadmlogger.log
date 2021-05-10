@@ -1,20 +1,20 @@
 /**
-* SYSADM Server
-* @Author  Wayne Wang <net_use@bzhy.com>
-* @Copyright Bzhy Network
-* @HomePage http://www.sysadm.cn
-* @Version 0.21.03
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-* http://www.apache.org/licenses/LICENSE-2.0
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*       @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
-* @Modified Apr 22 2021
+	* SYSADM Server1
+	* @Author  Wayne Wang <net_use@bzhy.com>
+	* @Copyright Bzhy Network
+	* @HomePage http://www.sysadm.cn
+	* @Version 0.21.03
+	* Licensed under the Apache License, Version 2.0 (the "License");
+	* you may not use this file except in compliance with the License.
+	* You may obtain a copy of the License at
+	* http://www.apache.org/licenses/LICENSE-2.0
+	* Unless required by applicable law or agreed to in writing, software
+	* distributed under the License is distributed on an "AS IS" BASIS,
+	* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	* See the License for the specific language governing permissions and
+	* limitations under the License.
+	*       @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
+	* @Modified May 03 2021
 **/
 
 package sysadmlogger
@@ -28,38 +28,26 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-/*
-configLogger struct used to save parameters for logger, such as access log file error log file
-*/
+var LogLevel = [7]string{"panic", "fatal", "error", "warn", "info", "debug", "trace"} 
 
+//SysadmLogger struct used to save parameters for logger, such as access log file error log file
 type SysadmLogger struct {
-	//accessLoggerFile is the path of access log file ,if logger access log to a file
-	accessLoggerFile string
-	//errorLoggerFile is the path of error log file ,if logger error log to a file
-	errorLoggerFile string
+	accessLoggerFile string //accessLoggerFile is the path of access log file ,if logger access log to a file
+	errorLoggerFile  string //errorLoggerFile is the path of error log file ,if logger error log to a file
 
-	//The file descriptor of the access log file
-	accessFp *os.File
-	//The file descriptor of the error log file
-	errorFp *os.File
+	accessFp *os.File //The file descriptor of the access log file
+	errorFp  *os.File //The file descriptor of the error log file
 
-	//Logger for access log
-	accessLogger *log.Logger
-	//Logger for error log
-	errorLogger *log.Logger
-	//Logger for stdout
-	stdoutLogger *log.Logger
+	accessLogger *log.Logger //Logger for access log
+	errorLogger  *log.Logger //Logger for error log
+	stdoutLogger *log.Logger //Logger for stdout
 
-	//set log format for output
-	LoggerFormat string
-	//set date formate
-	DateFormat string
+	LoggerFormat string //set log format for output
+	DateFormat   string //set date formate
 
-	//If all log message log to stdout ,then Allstdout should be set to True
-	Allstdout bool
+	Allstdout bool   //If all log message log to stdout ,then Allstdout should be set to True
+	logLevel  uint32 //Only log the `logLevel` severity or above.
 }
-
-var LevelList = [7]string{"panic", "fatal", "error", "warn", "info", "debug", "trace"}
 
 //Set global variable config and its default value
 var sysadmLogger = SysadmLogger{
@@ -75,20 +63,22 @@ var sysadmLogger = SysadmLogger{
 
 	LoggerFormat: "Text",
 	DateFormat:   time.RFC3339, //Ref: https://studygolang.com/static/pkgdoc/pkg/time.htm#Time.Format
-	Allstdout:    true,
+
+	Allstdout: true,
+	logLevel:  5,
 }
 
+//Return a instance of SysadmLogger
 func New() *SysadmLogger {
 	return &sysadmLogger
 }
 
-/*
-* initated a logger to logging log message to stdout
- */
+// InitStdoutLogger initated a logger to logging log message to stdout
+// accroding SysadmLogger.LoggerFormat set log formate and set SysadmLogger.stdoutLogger with the initated instance
 func (sysadmLogger *SysadmLogger) InitStdoutLogger() (stdoutLogger *log.Logger, err error) {
 	stdoutLogger = log.New()
 	stdoutLogger.Out = os.Stdout
-	stdoutLogger = sysadmLogger.SetLogFormat(stdoutLogger, "stdout")
+	stdoutLogger = sysadmLogger.SetFormat(stdoutLogger, "stdout")
 
 	sysadmLogger.stdoutLogger = stdoutLogger
 	if sysadmLogger.accessLogger == nil && sysadmLogger.errorLogger == nil {
@@ -99,10 +89,8 @@ func (sysadmLogger *SysadmLogger) InitStdoutLogger() (stdoutLogger *log.Logger, 
 
 }
 
-/*
-* Init logger enity for access or error.
-* before call this func, sysadmLoggerLogfile(logType, logFile) should be called
- */
+//Init logger instance  for access or error.
+//before call this func, sysadmLoggerLogfile(logType, logFile) should be called
 func (sysadmLogger *SysadmLogger) InitLogger(logType string, toStdout bool) (logger *log.Logger, err error) {
 	err = nil
 	if strings.ToLower(logType) != "access" && strings.ToLower(logType) != "error" {
@@ -117,7 +105,7 @@ func (sysadmLogger *SysadmLogger) InitLogger(logType string, toStdout bool) (log
 		}
 		logger = log.New()
 		logger.Out = sysadmLogger.accessFp
-		logger = sysadmLogger.SetLogFormat(logger, logType)
+		logger = sysadmLogger.SetFormat(logger, logType)
 		sysadmLogger.accessLogger = logger
 		if toStdout {
 			sysadmLogger.Allstdout = true
@@ -134,7 +122,7 @@ func (sysadmLogger *SysadmLogger) InitLogger(logType string, toStdout bool) (log
 
 	logger = log.New()
 	logger.Out = sysadmLogger.errorFp
-	logger = sysadmLogger.SetLogFormat(logger, logType)
+	logger = sysadmLogger.SetFormat(logger, logType)
 	sysadmLogger.errorLogger = logger
 
 	return logger, nil
@@ -202,10 +190,10 @@ func (sysadmLogger *SysadmLogger) EndLogger(logType string) (err error) {
 }
 
 /*
-* set log formate to text or json and set loggerFormat
+* set log format to text or json and set loggerFormat
 * the fields of the struct of loggerFormat refer to :https://pkg.go.dev/github.com/sirupsen/logrus#JSONFormatter
  */
-func (sysadmLogger *SysadmLogger) SetLogFormat(Logger *log.Logger, logType string) (logger *log.Logger) {
+func (sysadmLogger *SysadmLogger) SetFormat(Logger *log.Logger, logType string) (logger *log.Logger) {
 	if strings.ToLower(logType) == "access" || strings.ToLower(logType) == "error" {
 		if strings.ToLower(sysadmLogger.LoggerFormat) == "text" {
 			Logger.SetFormatter(&log.TextFormatter{
@@ -257,7 +245,7 @@ func (sysadmLogger *SysadmLogger) SetLogFormat(Logger *log.Logger, logType strin
 /*
 * set logger level to sysadmLogger.loggerLevel
  */
-func (sysadmLogger *SysadmLogger) SetLoglevel(loggerLevel string, Logger *log.Logger) (logger *log.Logger) {
+func (sysadmLogger *SysadmLogger) Setlevel(loggerLevel string, Logger *log.Logger) (logger *log.Logger) {
 
 	switch strings.ToLower(loggerLevel) {
 	case "panic":
@@ -353,24 +341,24 @@ func (sysadmLogger *SysadmLogger) LoggingLog(logType string, logLevel string, ar
 		stdLogger = sysadmLogger.stdoutLogger
 	}
 
-	found := -1
-	for i := 0; i < len(logLevel); i++ {
-		if strings.ToLower(logLevel) == LevelList[i] {
-			found = i
-			break
-		}
-	}
-
-	if found < 0 {
-		logLevel = "debug"
-	}
-
-	if logger != nil {
-		logger = sysadmLogger.SetLoglevel(logLevel, logger)
+	if stdLogger != nil {
+		stdLogger = sysadmLogger.Setlevel(logLevel, stdLogger)
 	}
 
 	if stdLogger != nil {
-		stdLogger = sysadmLogger.SetLoglevel(logLevel, stdLogger)
+		level := stdLogger.GetLevel()
+		if level != sysadmLogger.logLevel {
+			sysadmLogger.Setlevel(LogLevel[sysadmLogger.logLevel], stdLogger)
+		}
+		sysadmLogger.SetFormat(stdLogger, "stdout")
+	}
+
+	if logger != nil {
+		level := logger.GetLevel()
+		if level != sysadmLogger.logLevel {
+			sysadmLogger.Setlevel(LogLevel[sysadmLogger.logLevel], logger)
+		}
+		sysadmLogger.SetFormat(logger, "access")
 	}
 	switch strings.ToLower(logLevel) {
 	case "panic":
@@ -432,300 +420,43 @@ func (sysadmLogger *SysadmLogger) LoggingLog(logType string, logLevel string, ar
 	}
 }
 
-/*
- * Logging a message to Logger
- * if the sysadmLogger.Allstdout ,then logging the log messages to stdout
- */
-func (sysadmLogger *SysadmLogger) LoggingLogf(logType string, logLevel string, format string, args ...interface{}) {
-
-	var logger *log.Logger
-	var tostdout bool
-	var stdLogger *log.Logger
-
-	tostdout = sysadmLogger.Allstdout
-	logger = nil
-	stdLogger = nil
-
-	switch strings.ToLower(logType) {
-	case "access":
-		logger = sysadmLogger.accessLogger
-		break
-	case "error":
-		logger = sysadmLogger.errorLogger
-		break
-	case "stdout":
-		tostdout = false
-		logger = sysadmLogger.stdoutLogger
-	default:
-		tostdout = false
-		logger = sysadmLogger.stdoutLogger
+//stdoutWriter is a implementation of the interface sysadmLogWrite
+func (sysadmLogger *SysadmLogger) stdoutWriter(level int, msg string) {
+	if level < 0 && level > 6 {
+		level = 5
 	}
 
-	if tostdout {
-		stdLogger = sysadmLogger.stdoutLogger
-	}
-
-	found := -1
-	for i := 0; i < len(LevelList); i++ {
-		if strings.ToLower(logLevel) == LevelList[i] {
-			found = i
-			break
-		}
-	}
-
-	if found < 0 {
-		logLevel = "debug"
-	}
-
-	if logger != nil {
-		logger = sysadmLogger.SetLoglevel(logLevel, logger)
-		switch strings.ToLower(logLevel) {
-		case "panic":
-			logger.Panicf(format, args...)
-			break
-		case "fatal":
-			logger.Fatalf(format, args...)
-			break
-		case "error":
-			logger.Errorf(format, args...)
-			break
-		case "warn":
-			logger.Warnf(format, args...)
-			break
-		case "info":
-			logger.Infof(format, args...)
-			break
-		case "debug":
-			logger.Debugf(format, args...)
-			break
-		case "trace":
-			logger.Tracef(format, args...)
-			break
-		}
-	}
-
-	if stdLogger != nil {
-		stdLogger = sysadmLogger.SetLoglevel(logLevel, stdLogger)
-		switch strings.ToLower(logLevel) {
-		case "panic":
-			stdLogger.Panicf(format, args...)
-			break
-		case "fatal":
-			stdLogger.Fatalf(format, args...)
-			break
-		case "error":
-			stdLogger.Errorf(format, args...)
-			break
-		case "warn":
-			stdLogger.Warnf(format, args...)
-			break
-		case "info":
-			stdLogger.Infof(format, args...)
-			break
-		case "debug":
-			stdLogger.Debugf(format, args...)
-			break
-		case "trace":
-			stdLogger.Tracef(format, args...)
-			break
-		}
-	}
+	sysadmLogger.LoggingLog("stdout", LogLevel[level], msg)
 }
 
-/*
- * Logging a message to Logger
- * if the sysadmLogger.Allstdout ,then logging the log messages to stdout
- */
-func (sysadmLogger *SysadmLogger) LoggingLogln(logType string, logLevel string, args ...interface{}) {
+func (sysadmLogger *SysadmLogger) accessWriter(level int, msg string) {
+	if level < 0 && level > 6 {
+		level = 5
 
-	var logger *log.Logger
-	var tostdout bool
-	var stdLogger *log.Logger
-
-	tostdout = sysadmLogger.Allstdout
-	logger = nil
-	stdLogger = nil
-
-	switch strings.ToLower(logType) {
-	case "access":
-		logger = sysadmLogger.accessLogger
-		break
-	case "error":
-		logger = sysadmLogger.errorLogger
-		break
-	case "stdout":
-		tostdout = false
-		logger = sysadmLogger.stdoutLogger
-	default:
-		tostdout = false
-		logger = sysadmLogger.stdoutLogger
 	}
+	sysadmLogger.LoggingLog("access", LogLevel[level], msg)
 
-	if tostdout {
-		stdLogger = sysadmLogger.stdoutLogger
-	}
-
-	found := -1
-	for i := 0; i < len(LevelList); i++ {
-		if strings.ToLower(logLevel) == LevelList[i] {
-			found = i
-			break
-		}
-	}
-
-	if found < 0 {
-		logLevel = "debug"
-	}
-	if logger != nil {
-		logger = sysadmLogger.SetLoglevel(logLevel, logger)
-		switch strings.ToLower(logLevel) {
-		case "panic":
-			logger.Panicln(args...)
-			break
-		case "fatal":
-			logger.Fatalln(args...)
-			break
-		case "error":
-			logger.Errorln(args...)
-			break
-		case "warn":
-			logger.Warnln(args...)
-			break
-		case "info":
-			logger.Infoln(args...)
-			break
-		case "debug":
-			logger.Debugln(args...)
-			break
-		case "trace":
-			logger.Traceln(args...)
-			break
-		}
-	}
-
-	if stdLogger != nil {
-		stdLogger = sysadmLogger.SetLoglevel(logLevel, stdLogger)
-		switch strings.ToLower(logLevel) {
-		case "panic":
-			stdLogger.Panicln(args...)
-			break
-		case "fatal":
-			stdLogger.Fatalln(args...)
-			break
-		case "error":
-			stdLogger.Errorln(args...)
-			break
-		case "warn":
-			stdLogger.Warnln(args...)
-			break
-		case "info":
-			stdLogger.Infoln(args...)
-			break
-		case "debug":
-			stdLogger.Debugln(args...)
-			break
-		case "trace":
-			stdLogger.Traceln(args...)
-			break
-		}
-	}
 }
 
-/*
- * Logging a message to Logger
- * if the sysadmLogger.Allstdout ,then logging the log messages to stdout
- */
-func (sysadmLogger *SysadmLogger) LoggingLogFn(logType string, logLevel string, fn log.LogFunction) {
+func (sysadmLogger *SysadmLogger) errorWriter(level int, msg string) {
+	if level < 0 && level > 6 {
+		level = 5
+	}
+	sysadmLogger.LoggingLog("error", LogLevel[level], msg)
+}
 
-	var logger *log.Logger
-	var tostdout bool
-	var stdLogger *log.Logger
-
-	tostdout = sysadmLogger.Allstdout
-	logger = nil
-	stdLogger = nil
-
-	switch strings.ToLower(logType) {
-	case "access":
-		logger = sysadmLogger.accessLogger
-		break
-	case "error":
-		logger = sysadmLogger.errorLogger
-		break
-	case "stdout":
-		tostdout = false
-		logger = sysadmLogger.stdoutLogger
-	default:
-		tostdout = false
-		logger = sysadmLogger.stdoutLogger
+func (sysadmLogger *SysadmLogger) setLogFormat(format string) {
+	if strings.ToLower(format) != "text" && strings.ToLower(format) != "json" {
+		format = "json"
 	}
 
-	if tostdout {
-		stdLogger = sysadmLogger.stdoutLogger
+	sysadmLogger.LoggerFormat = format
+}
+
+func (sysadmLogger *SysadmLogger) setLogLevel(level int) {
+	if level < 0 || level > 6 {
+		level = 5
 	}
 
-	found := -1
-	for i := 0; i < len(LevelList); i++ {
-		if strings.ToLower(logLevel) == LevelList[i] {
-			found = i
-			break
-		}
-	}
-
-	if found < 0 {
-		logLevel = "debug"
-	}
-	if logger != nil {
-		logger = sysadmLogger.SetLoglevel(logLevel, logger)
-		switch strings.ToLower(logLevel) {
-		case "panic":
-			logger.PanicFn(fn)
-			break
-		case "fatal":
-			logger.FatalFn(fn)
-			break
-		case "error":
-			logger.ErrorFn(fn)
-			break
-		case "warn":
-			logger.WarnFn(fn)
-			break
-		case "info":
-			logger.InfoFn(fn)
-			break
-		case "debug":
-			logger.DebugFn(fn)
-			break
-		case "trace":
-			logger.TraceFn(fn)
-			break
-		}
-	}
-
-	if stdLogger != nil {
-		stdLogger = sysadmLogger.SetLoglevel(logLevel, stdLogger)
-		switch strings.ToLower(logLevel) {
-		case "panic":
-			stdLogger.PanicFn(fn)
-			break
-		case "fatal":
-			stdLogger.FatalFn(fn)
-			break
-		case "error":
-			stdLogger.ErrorFn(fn)
-			break
-		case "warn":
-			stdLogger.WarnFn(fn)
-			break
-		case "info":
-			stdLogger.InfoFn(fn)
-			break
-		case "debug":
-			stdLogger.DebugFn(fn)
-			break
-		case "trace":
-			stdLogger.TraceFn(fn)
-			break
-		}
-	}
+	sysadmLogger.logLevel = level
 }

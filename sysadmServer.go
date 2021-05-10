@@ -24,7 +24,8 @@ import (
 	"net"
 	"sync"
 
-	"github.com/gin-gonic/gin/render"
+	"github.com/wangyysde/sysadmServer/render"
+	"github.com/wangyysde/sysadmlogger/sysadmlogger"
 )
 
 // HandlerFunc defines the handler used by sysadmServer middleware as return value.
@@ -33,8 +34,16 @@ type HandlerFunc func(*Context)
 // HandlersChain defines a HandlerFunc array.
 type HandlersChain []HandlerFunc
 
-//LogWriter defines the funtion to write log message to stdout,access file or error file
-type LogWriter func(int, string)
+var LogLevel = [7]string{"panic", "fatal", "error", "warn", "info", "debug", "trace"}
+
+//
+type sysadmLogWriter interface {
+	stdoutWriter(int, string)
+	accessWriter(int, string)
+	errorWriter(int, string)
+	setLogFormat(string)
+	setLogLevel(int)
+}
 
 // Engine is the framework's instance, it contains the muxer, middleware and configuration settings.
 // Create an instance of Engine, by using New() or Default()
@@ -118,12 +127,65 @@ type Engine struct {
 	maxParams        uint16
 	trustedCIDRs     []*net.IPNet
 
-	//Writer for logging message to Stdout
-	StdoutWriter LogWriter
+	//logWriter point to implementation of interface sysadmLogWriter
+	logWriter sysadmLogWriter
+}
 
-	//Writer for logging message to Access file
-	AccessWriter LogWriter
+// New returns a new blank Engine instance without any middleware attached.
+// By default the configuration is:
+// - RedirectTrailingSlash:  true
+// - RedirectFixedPath:      false
+// - HandleMethodNotAllowed: false
+// - ForwardedByClientIP:    true
+// - UseRawPath:             false
+// - UnescapePathValues:     true
+func New() *Engine {
+	//	  debugPrintWARNINGNew()
+	engine := &Engine{
+		RouterGroup: RouterGroup{
+			Handlers: nil,
+			basePath: "/",
+			root:     true,
+		},
+		FuncMap:                template.FuncMap{},
+		RedirectTrailingSlash:  true,
+		RedirectFixedPath:      false,
+		HandleMethodNotAllowed: false,
+		ForwardedByClientIP:    true,
+		RemoteIPHeaders:        []string{"X-Forwarded-For", "X-Real-IP"},
+		TrustedProxies:         []string{"0.0.0.0/0"},
+		AppEngine:              defaultAppEngine,
+		UseRawPath:             false,
+		RemoveExtraSlash:       false,
+		UnescapePathValues:     true,
+		MaxMultipartMemory:     defaultMultipartMemory,
+		trees:                  make(methodTrees, 0, 9),
+		delims:                 render.Delims{Left: "{{", Right: "}}"},
+		secureJSONPrefix:       "while(1);",
+		logWriter:              nil,
+	}
 
-	//Writer for logging message to Error file
-	ErrorWriter LogWriter
+	engine.RouterGroup.engine = engine
+	engine.pool.New = func() interface{} {
+		return engine.allocateContext()
+	}
+
+	Loger := sysadmlogger.New()
+	engine.logWriter = Loger
+
+	Loger.InitStdoutLogger()
+	Loger.Allstdout = true
+	Loger.accessLogger = Loger.stdoutLogger
+	Loger.errorLogger = Loger.stdoutLogger
+
+	return engine
+
+}
+
+// Default returns an Engine instance with the Logger and Recovery middleware already attached.
+func Default() *Engine {
+	engine := New()
+	debugPrintWARNINGDefault()
+	engine.Use(Logger(), Recovery())
+	return engine
 }
