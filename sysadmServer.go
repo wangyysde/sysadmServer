@@ -1,20 +1,20 @@
 /**
-* SYSADM Server
-* @Author  Wayne Wang <net_use@bzhy.com>
-* @Copyright Bzhy Network
-* @HomePage http://www.sysadm.cn
-* @Version 0.1.0
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-* http://www.apache.org/licenses/LICENSE-2.0
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-* @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
-* @Modified Apr 20 2021
+	* SYSADM Server
+	* @Author  Wayne Wang <net_use@bzhy.com>
+	* @Copyright Bzhy Network
+	* @HomePage http://www.sysadm.cn
+	* @Version 0.1.0
+	* Licensed under the Apache License, Version 2.0 (the "License");
+	* you may not use this file except in compliance with the License.
+	* You may obtain a copy of the License at
+	* http://www.apache.org/licenses/LICENSE-2.0
+	* Unless required by applicable law or agreed to in writing, software
+	* distributed under the License is distributed on an "AS IS" BASIS,
+	* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	* See the License for the specific language governing permissions and
+	* limitations under the License.
+	* @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
+	* @Modified Apr 20 2021
 **/
 
 package sysadmServer
@@ -25,7 +25,7 @@ import (
 	"sync"
 
 	"github.com/wangyysde/sysadmServer/render"
-	"github.com/wangyysde/sysadmlogger/sysadmlogger"
+	"github.com/wangyysde/sysadmServer/sysadmlogger"
 )
 
 // HandlerFunc defines the handler used by sysadmServer middleware as return value.
@@ -38,11 +38,11 @@ var LogLevel = [7]string{"panic", "fatal", "error", "warn", "info", "debug", "tr
 
 //
 type sysadmLogWriter interface {
-	stdoutWriter(int, string)
-	accessWriter(int, string)
-	errorWriter(int, string)
+	stdoutWriter(string, string)
+	accessWriter(string, string)
+	errorWriter(string, string)
 	setLogFormat(string)
-	setLogLevel(int)
+	setLogLevel(string)
 }
 
 // Engine is the framework's instance, it contains the muxer, middleware and configuration settings.
@@ -170,13 +170,13 @@ func New() *Engine {
 		return engine.allocateContext()
 	}
 
-	Loger := sysadmlogger.New()
+	loger := sysadmlogger.New()
 	engine.logWriter = Loger
 
-	Loger.InitStdoutLogger()
-	Loger.Allstdout = true
-	Loger.accessLogger = Loger.stdoutLogger
-	Loger.errorLogger = Loger.stdoutLogger
+	loger.InitStdoutLogger()
+	loger.Allstdout = true
+	loger.accessLogger = loger.stdoutLogger
+	loger.errorLogger = loger.stdoutLogger
 
 	return engine
 

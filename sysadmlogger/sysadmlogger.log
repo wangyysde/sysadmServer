@@ -421,12 +421,20 @@ func (sysadmLogger *SysadmLogger) LoggingLog(logType string, logLevel string, ar
 }
 
 //stdoutWriter is a implementation of the interface sysadmLogWrite
-func (sysadmLogger *SysadmLogger) stdoutWriter(level int, msg string) {
-	if level < 0 && level > 6 {
-		level = 5
-	}
+func (sysadmLogger *SysadmLogger) stdoutWriter(level string, msg string) {
+    
+    var levelName := ""
+    for index, value := range LogLevel {
+      if strings.ToLower(level) == value {
+          levelName = level
+      }
+    }
 
-	sysadmLogger.LoggingLog("stdout", LogLevel[level], msg)
+    if levelName == "" {
+        levelName = "debug"
+    }
+
+	sysadmLogger.LoggingLog("stdout", levelName, msg)
 }
 
 func (sysadmLogger *SysadmLogger) accessWriter(level int, msg string) {
