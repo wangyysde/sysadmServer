@@ -23,7 +23,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/wangyysde/sysadmServer"
 )
 
 // Redirect contains the http request reference and redirects status code and location.
@@ -31,7 +30,6 @@ type Redirect struct {
 	Code     int
 	Request  *http.Request
 	Location string
-	egine    *sysadmServer.Engine
 }
 
 // Render (Redirect) redirects the http request to new location and writes redirect response.
