@@ -17,7 +17,7 @@
 	* @Modified May 03 2021
 **/
 
-package sysadmlogger
+package sysadmLogger
 
 import (
 	"fmt"
