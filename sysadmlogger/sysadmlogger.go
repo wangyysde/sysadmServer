@@ -28,28 +28,40 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// LogLevel: log level string which will output prefix to log message
 var LogLevel = [7]string{"panic", "fatal", "error", "warn", "info", "debug", "trace"} 
 
-//SysadmLogger struct used to save parameters for logger, such as access log file error log file
+// SysadmLogger struct used to save parameters for logger, such as access log file error log file
 type SysadmLogger struct {
-	accessLoggerFile string //accessLoggerFile is the path of access log file ,if logger access log to a file
-	errorLoggerFile  string //errorLoggerFile is the path of error log file ,if logger error log to a file
+	// accessLoggerFile: is the path of access log file when log access log to a file.
+	accessLoggerFile string 
+	// errorLoggerFile: is the path of error log file ,if logger error log to a file.
+	errorLoggerFile  string 
 
-	accessFp *os.File //The file descriptor of the access log file
-	errorFp  *os.File //The file descriptor of the error log file
+	// accessFp: file descriptor of the access log file
+	accessFp *os.File 
+	// errorFp: file descriptor of the error log file
+	errorFp  *os.File 
 
-	accessLogger *log.Logger //Logger for access log
+	// Logger for access log
+	accessLogger *log.Logger 
 	errorLogger  *log.Logger //Logger for error log
 	stdoutLogger *log.Logger //Logger for stdout
 
-	LoggerFormat string //set log format for output
+	//log formate is text or json
+	loggerFormat string
+	//TODO
 	DateFormat   string //set date formate
 
-	Allstdout bool   //If all log message log to stdout ,then Allstdout should be set to True
-	logLevel  uint32 //Only log the `logLevel` severity or above.
+	// Allstdout: log message into access(or error) log file and stdout if this value is ture; 
+	// or log message into access(or error) log file without stdout.
+	// when access(or error) logger no initated,messages will be log to stdout even if this value is false 
+	Allstdout bool   
+	//Only log the `logLevel` severity or above.
+	logLevel  log.Level
 }
 
-//Set global variable config and its default value
+// Set global variables and its default value
 var sysadmLogger = SysadmLogger{
 	accessLoggerFile: "",
 	errorLoggerFile:  "",
@@ -61,7 +73,7 @@ var sysadmLogger = SysadmLogger{
 	errorLogger:  nil,
 	stdoutLogger: nil,
 
-	LoggerFormat: "Text",
+	loggerFormat: "Text",
 	DateFormat:   time.RFC3339, //Ref: https://studygolang.com/static/pkgdoc/pkg/time.htm#Time.Format
 
 	Allstdout: true,
@@ -90,7 +102,7 @@ func (sysadmLogger *SysadmLogger) InitStdoutLogger() (stdoutLogger *log.Logger, 
 }
 
 //Init logger instance  for access or error.
-//before call this func, sysadmLoggerLogfile(logType, logFile) should be called
+//before call this func, openLogFile(logType, logFile) should be called
 func (sysadmLogger *SysadmLogger) InitLogger(logType string, toStdout bool) (logger *log.Logger, err error) {
 	err = nil
 	if strings.ToLower(logType) != "access" && strings.ToLower(logType) != "error" {
@@ -100,7 +112,7 @@ func (sysadmLogger *SysadmLogger) InitLogger(logType string, toStdout bool) (log
 
 	if strings.ToLower(logType) == "access" {
 		if sysadmLogger.accessFp == nil {
-			err = fmt.Errorf("May be not set access log, you should call sysadmLoggerLogfile(%s, logFile) before call InitLogger", logType)
+			err = fmt.Errorf("May be not set access log, you should call openLogFile(%s, logFile) before call InitLogger", logType)
 			return nil, err
 		}
 		logger = log.New()
@@ -116,7 +128,7 @@ func (sysadmLogger *SysadmLogger) InitLogger(logType string, toStdout bool) (log
 	}
 
 	if sysadmLogger.errorFp == nil {
-		err = fmt.Errorf("May be not set error log, you should call sysadmLoggerLogfile(%s, logFile) before call InitLogger", logType)
+		err = fmt.Errorf("May be not set error log, you should call openLogFile (%s, logFile) before call InitLogger", logType)
 		return nil, err
 	}
 
@@ -195,7 +207,7 @@ func (sysadmLogger *SysadmLogger) EndLogger(logType string) (err error) {
  */
 func (sysadmLogger *SysadmLogger) SetFormat(Logger *log.Logger, logType string) (logger *log.Logger) {
 	if strings.ToLower(logType) == "access" || strings.ToLower(logType) == "error" {
-		if strings.ToLower(sysadmLogger.LoggerFormat) == "text" {
+		if strings.ToLower(sysadmLogger.loggerFormat) == "text" {
 			Logger.SetFormatter(&log.TextFormatter{
 				ForceColors:               false, //Ref: https://pkg.go.dev/github.com/sirupsen/logrus#pkg-functions
 				DisableColors:             true,
@@ -216,7 +228,7 @@ func (sysadmLogger *SysadmLogger) SetFormat(Logger *log.Logger, logType string) 
 			})
 		}
 	} else {
-		if strings.ToLower(sysadmLogger.LoggerFormat) == "text" {
+		if strings.ToLower(sysadmLogger.loggerFormat) == "text" {
 			Logger.SetFormatter(&log.TextFormatter{
 				ForceColors:               true, //Ref: https://pkg.go.dev/github.com/sirupsen/logrus#pkg-functions
 				DisableColors:             false,
@@ -250,25 +262,18 @@ func (sysadmLogger *SysadmLogger) Setlevel(loggerLevel string, Logger *log.Logge
 	switch strings.ToLower(loggerLevel) {
 	case "panic":
 		Logger.SetLevel(log.PanicLevel)
-		break
 	case "fatal":
 		Logger.SetLevel(log.FatalLevel)
-		break
 	case "error":
 		Logger.SetLevel(log.ErrorLevel)
-		break
 	case "warn":
 		Logger.SetLevel(log.WarnLevel)
-		break
 	case "info":
 		Logger.SetLevel(log.InfoLevel)
-		break
 	case "debug":
 		Logger.SetLevel(log.DebugLevel)
-		break
 	case "trace":
 		Logger.SetLevel(log.TraceLevel)
-		break
 	default:
 		Logger.SetLevel(log.DebugLevel)
 	}
@@ -276,12 +281,11 @@ func (sysadmLogger *SysadmLogger) Setlevel(loggerLevel string, Logger *log.Logge
 	return Logger
 }
 
-/*
-* according to logType, sysadmLoggerLogfile set logFile to sysadmLogger.accessLoggerFile or sysadmLogger.errorLoggerFile
-* and set file descriptor to accessFp or errorFp if logFile can be opened.
-* to close the openned file on time, a defer function should be called following call this function if this return successful.
- */
-func (sysadmLogger *SysadmLogger) OpenLogfile(logType string, logFile string) (fp *os.File, err error) {
+
+// according to logType, openLogFile set logFile to sysadmLogger.accessLoggerFile or sysadmLogger.errorLoggerFile
+// and set file descriptor to accessFp or errorFp if logFile can be opened.
+// to close the openned file on time, a defer function should be called following call this function if this return successful.
+func (sysadmLogger *SysadmLogger) openLogFile(logType string, logFile string) (fp *os.File, err error) {
 
 	err = nil
 	if strings.ToLower(logType) != "access" && strings.ToLower(logType) != "error" {
@@ -308,10 +312,8 @@ func (sysadmLogger *SysadmLogger) OpenLogfile(logType string, logFile string) (f
 	return fp, err
 }
 
-/**
-* Logging a message to Logger
-* if the sysadmLogger.Allstdout ,then logging the log messages to stdout
- */
+// Logging a message to Logger
+// if the sysadmLogger.Allstdout ,then logging the log messages to stdout
 func (sysadmLogger *SysadmLogger) LoggingLog(logType string, logLevel string, args ...interface{}) {
 
 	var logger *log.Logger
@@ -325,10 +327,14 @@ func (sysadmLogger *SysadmLogger) LoggingLog(logType string, logLevel string, ar
 	switch strings.ToLower(logType) {
 	case "access":
 		logger = sysadmLogger.accessLogger
-		break
+		if logger == nil {
+			tostdout = true
+		}
 	case "error":
 		logger = sysadmLogger.errorLogger
-		break
+		if logger == nil {
+			tostdout = true
+		}
 	case "stdout":
 		tostdout = false
 		logger = sysadmLogger.stdoutLogger
@@ -336,6 +342,7 @@ func (sysadmLogger *SysadmLogger) LoggingLog(logType string, logLevel string, ar
 		tostdout = false
 		logger = sysadmLogger.stdoutLogger
 	}
+	
 
 	if tostdout {
 		stdLogger = sysadmLogger.stdoutLogger
@@ -420,51 +427,69 @@ func (sysadmLogger *SysadmLogger) LoggingLog(logType string, logLevel string, ar
 	}
 }
 
-//stdoutWriter is a implementation of the interface sysadmLogWrite
+// checking level name  is valid. 
+// if the level name  is invalid, then return `debug`
+func checkLevelName(level string) string {
+
+	var levelName = ""
+	for _, value := range LogLevel {
+		if strings.ToLower(level) == value {
+			levelName = level
+		}
+	}
+
+	if levelName == "" {
+		levelName = "debug"
+	}
+
+	return levelName
+}
+
+// stdoutWriter is a implementation of the interface sysadmLogWriter
 func (sysadmLogger *SysadmLogger) stdoutWriter(level string, msg string) {
     
-    var levelName := ""
-    for index, value := range LogLevel {
-      if strings.ToLower(level) == value {
-          levelName = level
-      }
-    }
-
-    if levelName == "" {
-        levelName = "debug"
-    }
-
+	levelName := checkLevelName(level)
+	
 	sysadmLogger.LoggingLog("stdout", levelName, msg)
 }
 
-func (sysadmLogger *SysadmLogger) accessWriter(level int, msg string) {
-	if level < 0 && level > 6 {
-		level = 5
+// accessWriter is a implementation of the interface sysadmLogWriter 
+// for log message to access log file
+func (sysadmLogger *SysadmLogger) accessWriter(level string, msg string) {
 
-	}
-	sysadmLogger.LoggingLog("access", LogLevel[level], msg)
+	levelName := checkLevelName(level)
+	sysadmLogger.LoggingLog("access", levelName, msg)
 
 }
 
-func (sysadmLogger *SysadmLogger) errorWriter(level int, msg string) {
-	if level < 0 && level > 6 {
-		level = 5
-	}
-	sysadmLogger.LoggingLog("error", LogLevel[level], msg)
+// errorWriter is a implementation of the interface sysadmLogWriter
+// for log message to error log file
+func (sysadmLogger *SysadmLogger) errorWriter(level string, msg string) {
+	
+	levelName := checkLevelName(level)
+	sysadmLogger.LoggingLog("error", levelName, msg)
 }
 
+// setLogFormat is a implementation of the interface sysadmLogWriter
+// for setting log format to SysadmLogger
 func (sysadmLogger *SysadmLogger) setLogFormat(format string) {
 	if strings.ToLower(format) != "text" && strings.ToLower(format) != "json" {
 		format = "json"
 	}
 
-	sysadmLogger.LoggerFormat = format
+	sysadmLogger.loggerFormat = format
 }
 
-func (sysadmLogger *SysadmLogger) setLogLevel(level int) {
-	if level < 0 || level > 6 {
-		level = 5
-	}
+// setLogLevel is a implementation of the interface sysadmLogWriter
+// for setting logLevel to SysadmLogger
+func (sysadmLogger *SysadmLogger) setLogLevel(level string) {
 
-	sysadmLogger.logLevel = level
+	logLevel := 5 
+	for index, value := range LogLevel {
+		if strings.ToLower(level) == value {
+			logLevel = index
+		}
+	}
+	
+	sysadmLogger.logLevel = log.Level(logLevel)
 }
