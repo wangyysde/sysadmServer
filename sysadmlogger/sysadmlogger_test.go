@@ -66,7 +66,7 @@ func TestAllstdout(t *testing.T){
 }
 
 	
-func TestnoAllstdout(t *testing.T){
+func TestAll(t *testing.T){
 	
 	sysadmlogger := New()
 	sysadmlogger.Allstdout = false
@@ -80,7 +80,6 @@ func TestnoAllstdout(t *testing.T){
 	} else {
 		defer sysadmlogger.EndLogger("access")
 	}
-	
 	
 	if _, err = sysadmlogger.openLogFile("error","/var/log/test_sysadmlogger_error_no.log"); err != nil {
 		t.Errorf("%s",err)
