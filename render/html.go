@@ -22,6 +22,8 @@ package render
 import (
 	"html/template"
 	"net/http"
+
+	"github.com/wangyysde/sysadmServer/sysadmlogger"
 )
 
 // Delims represents a set of Left and Right delimiters for HTML template rendering.
@@ -50,6 +52,7 @@ type HTMLDebug struct {
 	Glob    string
 	Delims  Delims
 	FuncMap template.FuncMap
+	logWriter interface{}
 }
 
 // HTML contains template reference and its name with given interface object.

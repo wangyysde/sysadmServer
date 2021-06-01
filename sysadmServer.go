@@ -36,15 +36,6 @@ type HandlersChain []HandlerFunc
 
 var LogLevel = [7]string{"panic", "fatal", "error", "warn", "info", "debug", "trace"}
 
-//
-type sysadmLogWriter interface {
-	stdoutWriter(string, string)
-	accessWriter(string, string)
-	errorWriter(string, string)
-	setLogFormat(string)
-	setLogLevel(string)
-}
-
 // Engine is the framework's instance, it contains the muxer, middleware and configuration settings.
 // Create an instance of Engine, by using New() or Default()
 type Engine struct {
@@ -128,7 +119,7 @@ type Engine struct {
 	trustedCIDRs     []*net.IPNet
 
 	//logWriter point to implementation of interface sysadmLogWriter
-	logWriter sysadmLogWriter
+	logWriter sysadmLogger.SysadmLogWriter
 }
 
 // New returns a new blank Engine instance without any middleware attached.
@@ -171,7 +162,7 @@ func New() *Engine {
 	}
 
 	loger := sysadmlogger.New()
-	engine.logWriter = Loger
+	engine.logWriter = loger
 
 	loger.InitStdoutLogger()
 	loger.Allstdout = true

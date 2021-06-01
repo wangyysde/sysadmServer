@@ -1,0 +1,2 @@
+20210601 move SysadmLogWriter interface to sysadmlogger/sysadmlogger.go as other packages use this interface
+20210601 在type HTMLDebug struct 添加logWriter interface{} 用于记录logwriter接口

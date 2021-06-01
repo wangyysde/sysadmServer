@@ -31,6 +31,18 @@ import (
 // LogLevel: log level string which will output prefix to log message
 var LogLevel = [7]string{"panic", "fatal", "error", "warn", "info", "debug", "trace"} 
 
+// a interface for log writer 
+// the field in sysadmServer.Engine.logWriter point to implementation of interface sysadmLogWriter
+// other packages use this implementation to log log message
+
+type SysadmLogWriter interface {
+    stdoutWriter(string, string)
+    accessWriter(string, string)
+    errorWriter(string, string)
+    setLogFormat(string)
+    setLogLevel(string)
+}
+
 // SysadmLogger struct used to save parameters for logger, such as access log file error log file
 type SysadmLogger struct {
 	// accessLoggerFile: is the path of access log file when log access log to a file.
