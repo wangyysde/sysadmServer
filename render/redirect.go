@@ -30,6 +30,7 @@ type Redirect struct {
 	Code     int
 	Request  *http.Request
 	Location string
+	logWriter interface{}
 }
 
 // Render (Redirect) redirects the http request to new location and writes redirect response.
@@ -38,7 +39,11 @@ func (r Redirect) Render(w http.ResponseWriter) error {
 		if r.egine.ErrorWriter != nil {
 			r.egine.ErrorWriter(0, fmt.Sprintf("Cannot redirect with status code %d", r.Code))
 		} else {
-			panic(fmt.Sprintf("Cannot redirect with status code %d", r.Code))
+			if r.logWriter != nil { 
+				r.logWriter.errorWriter(("panic",fmt.Sprintf("Cannot redirect with status code %d", r.Code))
+			} else {
+				panic(fmt.Sprintf("Cannot redirect with status code %d", r.Code))
+			}
 		}
 	}
 	http.Redirect(w, r.Request, r.Location, r.Code)

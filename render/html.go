@@ -91,7 +91,12 @@ func (r HTMLDebug) loadTemplate() *template.Template {
 	if r.Glob != "" {
 		return template.Must(template.New("").Delims(r.Delims.Left, r.Delims.Right).Funcs(r.FuncMap).ParseGlob(r.Glob))
 	}
-	panic("the HTML debug render was created without files or glob pattern")
+	//panic("the HTML debug render was created without files or glob pattern")
+	if r.logWriter != nil {
+		r.logWriter.errorWriter("panic", "the HTML debug render was created without files or glob pattern")
+	} else {
+		panic("the HTML debug render was created without files or glob pattern")
+	}
 }
 
 // Render (HTML) executes template and writes its result with custom ContentType for response.

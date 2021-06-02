@@ -32,6 +32,7 @@ import (
 // JSON contains the given interface object.
 type JSON struct {
 	Data interface{}
+	logWriter interface{}
 }
 
 // IndentedJSON contains the given interface object.
@@ -68,7 +69,11 @@ var jsonAsciiContentType = []string{"application/json"}
 // Render (JSON) writes data with custom ContentType.
 func (r JSON) Render(w http.ResponseWriter) (err error) {
 	if err = WriteJSON(w, r.Data); err != nil {
-		panic(err)
+		if r.logWriter != nil {
+			r.logWriter.errorWriter("panic",fmt.Sprintf("%s",err))
+		} else {
+			panic(err)
+		}
 	}
 	return
 }
