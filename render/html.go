@@ -52,7 +52,7 @@ type HTMLDebug struct {
 	Glob    string
 	Delims  Delims
 	FuncMap template.FuncMap
-	logWriter interface{}
+	logWriter sysadmlogger.SysadmLogWriter
 }
 
 // HTML contains template reference and its name with given interface object.

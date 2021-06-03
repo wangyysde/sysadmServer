@@ -22,6 +22,7 @@ package render
 import (
 	"fmt"
 	"net/http"
+	"github.com/wangyysde/sysadmServer/sysadmlogger"
 
 )
 
@@ -30,7 +31,7 @@ type Redirect struct {
 	Code     int
 	Request  *http.Request
 	Location string
-	logWriter interface{}
+	logWriter sysadmlogger.SysadmLogWriter
 }
 
 // Render (Redirect) redirects the http request to new location and writes redirect response.

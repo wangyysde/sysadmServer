@@ -27,12 +27,13 @@ import (
 
 	"github.com/wangyysde/sysadmServer/internal/bytesconv"
 	"github.com/wangyysde/sysadmServer/internal/json"
+	"github.com/wangyysde/sysadmServer/sysadmlogger"
 )
 
 // JSON contains the given interface object.
 type JSON struct {
 	Data interface{}
-	logWriter interface{}
+	logWriter sysadmlogger.SysadmLogWriter
 }
 
 // IndentedJSON contains the given interface object.
