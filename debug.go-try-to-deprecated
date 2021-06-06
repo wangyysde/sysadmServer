@@ -65,6 +65,7 @@ func SetMode(value string) {
 func IsDebugging() bool {
 	return sysadmServerMode == DebugMode
 }
+**/
 
 func (e *Engine) debugPrintWARNINGNew() {
 	if IsDebugging() {

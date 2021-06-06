@@ -2,4 +2,6 @@
 20210601 在type HTMLDebug struct 添加logWriter sysadmlogger.SysadmLogWriter  用于记录logwriter接口
 ***** 20210602 修改了render下文件，增加了logWriter接口调用。 所以，在sysadmServer调用render时需要做相应的修改。
 ***** 20210602 尝试废弃掉debug.go文件，所以，在sysadmServer调用debug相关函时需要相应的修改。
-20210603 修正render下文件内logWriter字段类型定义错误 
+20210603 修正render下文件内logWriter字段类型定义错误
+20210606 添加routergroup.go文件，但是需要进一步修改。 
+20210606 因为在Engine结构体中记录了logwriter，所认拟不将logger加到routergroup中。

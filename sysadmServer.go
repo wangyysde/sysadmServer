@@ -120,6 +120,7 @@ type Engine struct {
 
 	//logWriter point to implementation of interface sysadmLogWriter
 	logWriter sysadmLogger.SysadmLogWriter
+	
 }
 
 // New returns a new blank Engine instance without any middleware attached.
@@ -168,15 +169,27 @@ func New() *Engine {
 	loger.Allstdout = true
 	loger.accessLogger = loger.stdoutLogger
 	loger.errorLogger = loger.stdoutLogger
-
+	
+	engine.debugPrintWARNINGNew()
 	return engine
 
 }
 
+// Use attaches a global middleware to the router. ie. the middleware attached though Use() will be                                                                                                                                        
+// included in the handlers chain for every single request. Even 404, 405, static files...
+// For example, this is the right place for a logger or error management middleware.
+func (engine *Engine) Use(middleware ...HandlerFunc) IRoutes {
+    engine.RouterGroup.Use(middleware...)
+    engine.rebuild404Handlers()
+    engine.rebuild405Handlers()
+    return engine
+}
+
+
 // Default returns an Engine instance with the Logger and Recovery middleware already attached.
 func Default() *Engine {
 	engine := New()
-	debugPrintWARNINGDefault()
+	engine.logWriter.errorLogger("warn","Creating an Engine instance with the Logger and Recovery middleware already attached.")
 	engine.Use(Logger(), Recovery())
 	return engine
 }
