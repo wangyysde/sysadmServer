@@ -132,7 +132,6 @@ type Engine struct {
 // - UseRawPath:             false
 // - UnescapePathValues:     true
 func New() *Engine {
-	//	  debugPrintWARNINGNew()
 	engine := &Engine{
 		RouterGroup: RouterGroup{
 			Handlers: nil,
@@ -177,7 +176,6 @@ func New() *Engine {
 
 // Use attaches a global middleware to the router. ie. the middleware attached though Use() will be                                                                                                                                        
 // included in the handlers chain for every single request. Even 404, 405, static files...
-// For example, this is the right place for a logger or error management middleware.
 func (engine *Engine) Use(middleware ...HandlerFunc) IRoutes {
     engine.RouterGroup.Use(middleware...)
     engine.rebuild404Handlers()
@@ -185,11 +183,20 @@ func (engine *Engine) Use(middleware ...HandlerFunc) IRoutes {
     return engine
 }
 
+func (engine *Engine) rebuild404Handlers() {
+    engine.allNoRoute = engine.combineHandlers(engine.noRoute)
+}
+
+func (engine *Engine) rebuild405Handlers() {
+    engine.allNoMethod = engine.combineHandlers(engine.noMethod)
+}
+
+
 
 // Default returns an Engine instance with the Logger and Recovery middleware already attached.
 func Default() *Engine {
 	engine := New()
 	engine.logWriter.errorLogger("warn","Creating an Engine instance with the Logger and Recovery middleware already attached.")
-	engine.Use(Logger(), Recovery())
+	engine.Use(Recovery())
 	return engine
 }
