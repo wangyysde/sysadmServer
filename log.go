@@ -27,7 +27,8 @@ import (                                                                        
     "runtime"                                                                                                                                                                                               │ go.mod
     "strconv"                                                                                                                                                                                               │ go.sum
     "strings"
-	
+
+	"github.com/wangyysde/sysadmServer/sysadmlogger"
 )                                                                                                                                                                                                           │ README.md
 
 // Define running mode 
@@ -43,6 +44,20 @@ const (                                                                         
 // identifing the running mode of sysadmServer. 
 // default is DebugMode
 var sysadmServerMode = DebugMode                                                                                                                                                                            │~                             
+
+
+// DefaultWriter is the default io.Writer used by Gin for debug output and 
+// middleware output like Logger() or Recovery().
+// Note that both Logger and Recovery provides custom ways to configure their
+// output io.Writer.
+// To support coloring in Windows use:
+//      import "github.com/mattn/go-colorable"
+//      gin.DefaultWriter = colorable.NewColorableStdout()
+var DefaultWriter sysadmLogger.SysadmLogWriter = nil
+
+// DefaultErrorWriter is the default io.Writer used by Gin to debug errors
+var DefaultErrorWriter sysadmLogger.SysadmLogWriter = nil
+
 
 //Get the envirment variable EnvsysadmServerMode from OS                                                                                                                                                    │~                             
 //this variable specifing the sysadmServer runing mode. A valid value  of this variable is one of debug,release, test                                                                                       │~                             

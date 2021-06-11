@@ -5,3 +5,6 @@
 20210603 修正render下文件内logWriter字段类型定义错误
 20210606 添加routergroup.go文件，但是需要进一步修改。 
 20210606 因为在Engine结构体中记录了logwriter，所认拟不将logger加到routergroup中。
+20210611 deprecated-xxxxx.go 形式的程序文件将来都是准备删除的
+20210611  尝试将原来mode.go内的内容都移到log.go文件，并进行合并
+20210611  原来DefaultWriter 尝试换成sysadmLogger.SysadmLogWriter类型
