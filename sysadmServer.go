@@ -169,6 +169,11 @@ func New() *Engine {
 	loger.accessLogger = loger.stdoutLogger
 	loger.errorLogger = loger.stdoutLogger
 	
+	// Set DefaultWriter to loger.stdoutLogger for Recovery
+	DefaultWriter = loger.stdoutLogger
+	// Set DefaultErrorWriter to loger.stdoutLogger for Recovery
+	DefaultErrorWriter loger.stdoutLogger
+	
 	engine.debugPrintWARNINGNew()
 	return engine
 

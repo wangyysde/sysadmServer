@@ -46,16 +46,13 @@ const (                                                                         
 var sysadmServerMode = DebugMode                                                                                                                                                                            │~                             
 
 
-// DefaultWriter is the default io.Writer used by Gin for debug output and 
-// middleware output like Logger() or Recovery().
-// Note that both Logger and Recovery provides custom ways to configure their
-// output io.Writer.
-// To support coloring in Windows use:
-//      import "github.com/mattn/go-colorable"
-//      gin.DefaultWriter = colorable.NewColorableStdout()
+// DefaultWriter is the log Writer used by sysadmServer for debug output and 
+// middleware output like Recovery().
+// Note that Recovery provides custom ways to configure their
+// output sysadmLogger.SysadmLogWriter.
 var DefaultWriter sysadmLogger.SysadmLogWriter = nil
 
-// DefaultErrorWriter is the default io.Writer used by Gin to debug errors
+// DefaultErrorWriter is  log Writer used by sysadmServer to debug errors
 var DefaultErrorWriter sysadmLogger.SysadmLogWriter = nil
 
 
@@ -94,4 +91,5 @@ func (e *Engine) debugPrintWARNINGNew() {                                       
         `)                                                                                                                                                                                                  │~                             
     }                                                                                                                                                                                                       │~                             
 }
+
 

@@ -29,9 +29,11 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"os"
+	"fmt"
 	"runtime"
 	"strings"
 	"time"
+	"github.com/wangyysde/sysadmServer/sysadmlogger"
 )
 
 var (
@@ -55,19 +57,17 @@ func CustomRecovery(handle RecoveryFunc) HandlerFunc {
 }
 
 // RecoveryWithWriter returns a middleware for a given writer that recovers from any panics and writes a 500 if there was one.
-func RecoveryWithWriter(out io.Writer, recovery ...RecoveryFunc) HandlerFunc {
+func RecoveryWithWriter(sysadmLogger sysadmLogger.SysadmLogWriter, recovery ...RecoveryFunc) HandlerFunc {
 	if len(recovery) > 0 {
-		return CustomRecoveryWithWriter(out, recovery[0])
+		return CustomRecoveryWithWriter(sysadmLogger, recovery[0])
 	}
-	return CustomRecoveryWithWriter(out, defaultHandleRecovery)
+	
+	// return 500 error to client
+	return CustomRecoveryWithWriter(sysadmLogger, defaultHandleRecovery)
 }
 
 // CustomRecoveryWithWriter returns a middleware for a given writer that recovers from any panics and calls the provided handle func to handle it.
-func CustomRecoveryWithWriter(out io.Writer, handle RecoveryFunc) HandlerFunc {
-	var logger *log.Logger
-	if out != nil {
-		logger = log.New(out, "\n\n\x1b[31m", log.LstdFlags)
-	}
+func CustomRecoveryWithWriter(sysadmLogger sysadmLogger.SysadmLogWriter, handle RecoveryFunc) HandlerFunc {
 	return func(c *Context) {
 		defer func() {
 			if err := recover(); err != nil {
@@ -81,7 +81,7 @@ func CustomRecoveryWithWriter(out io.Writer, handle RecoveryFunc) HandlerFunc {
 						}
 					}
 				}
-				if logger != nil {
+				if sysadmLogger != nil {
 					stack := stack(3)
 					httpRequest, _ := httputil.DumpRequest(c.Request, false)
 					headers := strings.Split(string(httpRequest), "\r\n")
@@ -93,13 +93,13 @@ func CustomRecoveryWithWriter(out io.Writer, handle RecoveryFunc) HandlerFunc {
 					}
 					headersToStr := strings.Join(headers, "\r\n")
 					if brokenPipe {
-						logger.Printf("%s\n%s%s", err, headersToStr, reset)
+						sysadmLogger("error",fmt.Printf("%s\n%s%s", err, headersToStr, reset))
 					} else if IsDebugging() {
-						logger.Printf("[Recovery] %s panic recovered:\n%s\n%s\n%s%s",
-							timeFormat(time.Now()), headersToStr, err, stack, reset)
+						sysadmLogger("warn", fmt.Printf("[Recovery] %s panic recovered:\n%s\n%s\n%s%s",
+							timeFormat(time.Now()), headersToStr, err, stack, reset))
 					} else {
-						logger.Printf("[Recovery] %s panic recovered:\n%s\n%s%s",
-							timeFormat(time.Now()), err, stack, reset)
+						sysadmLogger("warn",fmt.Printf("[Recovery] %s panic recovered:\n%s\n%s%s",
+							timeFormat(time.Now()), err, stack, reset))
 					}
 				}
 				if brokenPipe {
