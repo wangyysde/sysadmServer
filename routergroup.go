@@ -14,7 +14,7 @@
 	* See the License for the specific language governing permissions and
 	* limitations under the License.
 	* @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
-	* @Modified Jun 06 2021
+	* @Modified Jun 12 2021
 **/
 
 package sysadmServer
@@ -24,6 +24,7 @@ import (
 	"path"
 	"regexp"
 	"strings"
+	"github.com/wangyysde/sysadmServer/sysadmLogger"
 )
 
 // IRouter defines all router handle interface includes single and group router.
@@ -103,7 +104,12 @@ func (group *RouterGroup) handle(httpMethod, relativePath string, handlers Handl
 // communication with a proxy).
 func (group *RouterGroup) Handle(httpMethod, relativePath string, handlers ...HandlerFunc) IRoutes {
 	if matches, err := regexp.MatchString("^[A-Z]+$", httpMethod); !matches || err != nil {
-		panic("http method " + httpMethod + " is not valid")
+		logWriter := group.engine.logWriter
+		if logWriter != nil {
+			logWriter.errorLogger("error",fmt.Printf("http method %s is not valid",httpMethod)
+			return nil
+		}
+		return nil 
 	}
 	return group.handle(httpMethod, relativePath, handlers)
 }
@@ -162,7 +168,12 @@ func (group *RouterGroup) Any(relativePath string, handlers ...HandlerFunc) IRou
 // router.StaticFile("favicon.ico", "./resources/favicon.ico")
 func (group *RouterGroup) StaticFile(relativePath, filepath string) IRoutes {
 	if strings.Contains(relativePath, ":") || strings.Contains(relativePath, "*") {
-		panic("URL parameters can not be used when serving a static file")
+		logWriter := group.engine.logWriter
+		if logWriter != nil {
+			logWriter.errorLogger("error","URL parameters can not be used when serving a static file")
+			return nil
+		}
+		return nil
 	}
 	handler := func(c *Context) {
 		c.File(filepath)
@@ -183,10 +194,13 @@ func (group *RouterGroup) Static(relativePath, root string) IRoutes {
 }
 
 // StaticFS works just like `Static()` but a custom `http.FileSystem` can be used instead.
-// Gin by default user: gin.Dir()
+// Gin by default user: sysadmServer.Dir()
 func (group *RouterGroup) StaticFS(relativePath string, fs http.FileSystem) IRoutes {
 	if strings.Contains(relativePath, ":") || strings.Contains(relativePath, "*") {
-		panic("URL parameters can not be used when serving a static folder")
+		logWriter := group.engine.logWriter
+		if logWriter != nil {
+			logWriter.errorLogger("error","URL parameters can not be used when serving a static folder")
+	
 	}
 	handler := group.createStaticHandler(relativePath, fs)
 	urlPattern := path.Join(relativePath, "/*filepath")
@@ -225,7 +239,11 @@ func (group *RouterGroup) createStaticHandler(relativePath string, fs http.FileS
 func (group *RouterGroup) combineHandlers(handlers HandlersChain) HandlersChain {
 	finalSize := len(group.Handlers) + len(handlers)
 	if finalSize >= int(abortIndex) {
-		panic("too many handlers")
+		logWriter := group.engine.logWriter
+		if logWriter != nil {
+			logWriter.errorLogger("panic","too many handlers")
+			return nil
+		}
 	}
 	mergedHandlers := make(HandlersChain, finalSize)
 	copy(mergedHandlers, group.Handlers)

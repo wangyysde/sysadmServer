@@ -8,3 +8,6 @@
 20210611 deprecated-xxxxx.go 形式的程序文件将来都是准备删除的
 20210611  尝试将原来mode.go内的内容都移到log.go文件，并进行合并
 20210611  原来DefaultWriter 尝试换成sysadmLogger.SysadmLogWriter类型
+20210612  修改了recovery.go文件，将文件中的原有log换成sysadmLogger.sysadmloggerWriter
+20210612  修改了routergroup.go 文件内的combineHandlers、Handle、StaticFile、StaticFS函数的记录日志方法，其返回值有可能是nil,在调用它的函数内需要做相应的处理。 
+20210612  routergroup.go文件修改结束
