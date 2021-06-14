@@ -11,3 +11,4 @@
 20210612  修改了recovery.go文件，将文件中的原有log换成sysadmLogger.sysadmloggerWriter
 20210612  修改了routergroup.go 文件内的combineHandlers、Handle、StaticFile、StaticFS函数的记录日志方法，其返回值有可能是nil,在调用它的函数内需要做相应的处理。 
 20210612  routergroup.go文件修改结束
+20210614  mover gin.go to sysadmServer.log ,but neet to check.
