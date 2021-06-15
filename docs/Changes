@@ -12,3 +12,4 @@
 20210612  修改了routergroup.go 文件内的combineHandlers、Handle、StaticFile、StaticFS函数的记录日志方法，其返回值有可能是nil,在调用它的函数内需要做相应的处理。 
 20210612  routergroup.go文件修改结束
 20210614  mover gin.go to sysadmServer.log ,but neet to check.
+20210615  This is added on Jun 15 2021
