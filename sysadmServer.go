@@ -24,8 +24,8 @@ import (
 	"net"
 	"sync"
 
+	"github.com/wangyysde/sysadmServer/sysadmLogger"
 	"github.com/wangyysde/sysadmServer/render"
-	"github.com/wangyysde/sysadmServer/sysadmlogger"
 )
 
 const defaultMultipartMemory = 32 << 20 // 32 MB
@@ -63,9 +63,6 @@ var _ IRouter = &Engine{}
 
 // HandlerFunc defines the handler used by sysadmServer middleware as return value.
 type HandlerFunc func(*Context)
-
-// HandlersChain defines a HandlerFunc array.
-type HandlersChain []HandlerFunc
 
 var LogLevel = [7]string{"panic", "fatal", "error", "warn", "info", "debug", "trace"}
 
@@ -202,23 +199,12 @@ func New() *Engine {
 	loger.accessLogger = loger.stdoutLogger
 	loger.errorLogger = loger.stdoutLogger
 	
-	// Set DefaultWriter to loger.stdoutLogger for Recovery
-	DefaultWriter = loger.stdoutLogger
-	// Set DefaultErrorWriter to loger.stdoutLogger for Recovery
-	DefaultErrorWriter loger.stdoutLogger
+	// Set LoggerWriter to loger for Recovery and otheres middleware
+	LoggerWriter = loger
 	
 	engine.debugPrintWARNINGNew()
 	return engine
 
-}
-
-// Use attaches a global middleware to the router. ie. the middleware attached though Use() will be                                                                                                                                        
-// included in the handlers chain for every single request. Even 404, 405, static files...
-func (engine *Engine) Use(middleware ...HandlerFunc) IRoutes {
-    engine.RouterGroup.Use(middleware...)
-    engine.rebuild404Handlers()
-    engine.rebuild405Handlers()
-    return engine
 }
 
 // Default returns an Engine instance with the Logger and Recovery middleware already attached.

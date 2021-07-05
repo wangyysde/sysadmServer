@@ -22,7 +22,7 @@ package render
 import (
 	"fmt"
 	"net/http"
-	"github.com/wangyysde/sysadmServer/sysadmlogger"
+	"github.com/wangyysde/sysadmServer/sysadmLogger"
 
 )
 
@@ -31,17 +31,17 @@ type Redirect struct {
 	Code     int
 	Request  *http.Request
 	Location string
-	logWriter sysadmlogger.SysadmLogWriter
+	logWriter sysadmLogger.SysadmLogWriter
 }
 
 // Render (Redirect) redirects the http request to new location and writes redirect response.
 func (r Redirect) Render(w http.ResponseWriter) error {
 	if (r.Code < http.StatusMultipleChoices || r.Code > http.StatusPermanentRedirect) && r.Code != http.StatusCreated {
-		if r.egine.ErrorWriter != nil {
-			r.egine.ErrorWriter(0, fmt.Sprintf("Cannot redirect with status code %d", r.Code))
+		if r.logWriter != nil {
+			r.logWriter.ErrorWriter("error", fmt.Sprintf("Cannot redirect with status code %d", r.Code))
 		} else {
 			if r.logWriter != nil { 
-				r.logWriter.errorWriter(("panic",fmt.Sprintf("Cannot redirect with status code %d", r.Code))
+				r.logWriter.ErrorWriter("panic",fmt.Sprintf("Cannot redirect with status code %d", r.Code))
 			} else {
 				panic(fmt.Sprintf("Cannot redirect with status code %d", r.Code))
 			}

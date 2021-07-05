@@ -23,7 +23,7 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/wangyysde/sysadmServer/sysadmlogger"
+	"github.com/wangyysde/sysadmServer/sysadmLogger"
 )
 
 // Delims represents a set of Left and Right delimiters for HTML template rendering.
@@ -52,7 +52,7 @@ type HTMLDebug struct {
 	Glob    string
 	Delims  Delims
 	FuncMap template.FuncMap
-	logWriter sysadmlogger.SysadmLogWriter
+	logWriter sysadmLogger.SysadmLogWriter
 }
 
 // HTML contains template reference and its name with given interface object.
@@ -93,10 +93,11 @@ func (r HTMLDebug) loadTemplate() *template.Template {
 	}
 	//panic("the HTML debug render was created without files or glob pattern")
 	if r.logWriter != nil {
-		r.logWriter.errorWriter("panic", "the HTML debug render was created without files or glob pattern")
+		r.logWriter.ErrorWriter("panic", "the HTML debug render was created without files or glob pattern")
 	} else {
 		panic("the HTML debug render was created without files or glob pattern")
 	}
+	return nil
 }
 
 // Render (HTML) executes template and writes its result with custom ContentType for response.

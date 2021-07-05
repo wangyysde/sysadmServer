@@ -27,13 +27,13 @@ import (
 
 	"github.com/wangyysde/sysadmServer/internal/bytesconv"
 	"github.com/wangyysde/sysadmServer/internal/json"
-	"github.com/wangyysde/sysadmServer/sysadmlogger"
+	"github.com/wangyysde/sysadmServer/sysadmLogger"
 )
 
 // JSON contains the given interface object.
 type JSON struct {
 	Data interface{}
-	logWriter sysadmlogger.SysadmLogWriter
+	logWriter sysadmLogger.SysadmLogWriter
 }
 
 // IndentedJSON contains the given interface object.
@@ -71,7 +71,7 @@ var jsonAsciiContentType = []string{"application/json"}
 func (r JSON) Render(w http.ResponseWriter) (err error) {
 	if err = WriteJSON(w, r.Data); err != nil {
 		if r.logWriter != nil {
-			r.logWriter.errorWriter("panic",fmt.Sprintf("%s",err))
+			r.logWriter.ErrorWriter("panic",fmt.Sprintf("%s",err))
 		} else {
 			panic(err)
 		}

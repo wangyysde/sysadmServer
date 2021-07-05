@@ -24,7 +24,7 @@ import (
 	"path"
 	"regexp"
 	"strings"
-	"github.com/wangyysde/sysadmServer/sysadmLogger"
+//	"github.com/wangyysde/sysadmServer/sysadmlogger"
 )
 
 // IRouter defines all router handle interface includes single and group router.
@@ -106,7 +106,7 @@ func (group *RouterGroup) Handle(httpMethod, relativePath string, handlers ...Ha
 	if matches, err := regexp.MatchString("^[A-Z]+$", httpMethod); !matches || err != nil {
 		logWriter := group.engine.logWriter
 		if logWriter != nil {
-			logWriter.errorLogger("error",fmt.Printf("http method %s is not valid",httpMethod)
+			logWriter.errorLogger("error",fmt.Printf("http method %s is not valid",httpMethod))
 			return nil
 		}
 		return nil 
@@ -200,7 +200,7 @@ func (group *RouterGroup) StaticFS(relativePath string, fs http.FileSystem) IRou
 		logWriter := group.engine.logWriter
 		if logWriter != nil {
 			logWriter.errorLogger("error","URL parameters can not be used when serving a static folder")
-	
+		}
 	}
 	handler := group.createStaticHandler(relativePath, fs)
 	urlPattern := path.Join(relativePath, "/*filepath")

@@ -17,7 +17,6 @@
 * @Modified Apr 20 2021
 **/
 
-//go:build !nomsgpack
 // +build !nomsgpack
 
 package render

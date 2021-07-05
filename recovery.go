@@ -22,17 +22,16 @@ package sysadmServer
 import (
 	"bytes"
 	"fmt"
-	"io"
+//	"io"
 	"io/ioutil"
 	"net"
 	"net/http"
 	"net/http/httputil"
 	"os"
-	"fmt"
 	"runtime"
 	"strings"
 	"time"
-	"github.com/wangyysde/sysadmServer/sysadmlogger"
+	"github.com/wangyysde/sysadmServer/sysadmLogger"
 )
 
 var (
@@ -47,12 +46,12 @@ type RecoveryFunc func(c *Context, err interface{})
 
 // Recovery returns a middleware that recovers from any panics and writes a 500 if there was one.
 func Recovery() HandlerFunc {
-	return RecoveryWithWriter(DefaultErrorWriter)
+	return RecoveryWithWriter(LoggerWriter)
 }
 
 //CustomRecovery returns a middleware that recovers from any panics and calls the provided handle func to handle it.
 func CustomRecovery(handle RecoveryFunc) HandlerFunc {
-	return RecoveryWithWriter(DefaultErrorWriter, handle)
+	return RecoveryWithWriter(LoggerWriter, handle)
 }
 
 // RecoveryWithWriter returns a middleware for a given writer that recovers from any panics and writes a 500 if there was one.
@@ -92,13 +91,13 @@ func CustomRecoveryWithWriter(sysadmLogger sysadmLogger.SysadmLogWriter, handle 
 					}
 					headersToStr := strings.Join(headers, "\r\n")
 					if brokenPipe {
-						sysadmLogger("error",fmt.Printf("%s\n%s%s", err, headersToStr, reset))
+						sysadmLogger.ErrorWriter("error",fmt.Sprintf("%v\n %s", err, headersToStr))
 					} else if IsDebugging() {
-						sysadmLogger("warn", fmt.Printf("[Recovery] %s panic recovered:\n%s\n%s\n%s%s",
-							timeFormat(time.Now()), headersToStr, err, stack, reset))
+						sysadmLogger.ErrorWriter("warn", fmt.Sprintf("[Recovery] %s panic recovered:\n%s\n%v\n%s",
+							timeFormat(time.Now()), headersToStr, err, stack))
 					} else {
-						sysadmLogger("warn",fmt.Printf("[Recovery] %s panic recovered:\n%s\n%s%s",
-							timeFormat(time.Now()), err, stack, reset))
+						sysadmLogger.ErrorWriter("warn",fmt.Sprintf("[Recovery] %s panic recovered:\n%s\n%s",
+							timeFormat(time.Now()), err, stack))
 					}
 				}
 				if brokenPipe {

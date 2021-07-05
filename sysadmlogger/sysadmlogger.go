@@ -36,11 +36,11 @@ var LogLevel = [7]string{"panic", "fatal", "error", "warn", "info", "debug", "tr
 // other packages use this implementation to log log message
 
 type SysadmLogWriter interface {
-    stdoutWriter(string, string)
-    accessWriter(string, string)
-    errorWriter(string, string)
-    setLogFormat(string)
-    setLogLevel(string)
+    StdoutWriter(string, string)
+    AccessWriter(string, string)
+    ErrorWriter(string, string)
+    SetLogFormat(string)
+    SetLogLevel(string)
 }
 
 // SysadmLogger struct used to save parameters for logger, such as access log file error log file
