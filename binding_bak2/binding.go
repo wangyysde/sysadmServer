@@ -1,3 +1,6 @@
+// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
 
 // +build !nomsgpack
 
@@ -44,7 +47,7 @@ type BindingUri interface {
 
 // StructValidator is the minimal interface which needs to be implemented in
 // order for it to be used as the validator engine for ensuring the correctness
-// of the request. sysadmServer provides a default implementation for this using
+// of the request. Gin provides a default implementation for this using
 // https://github.com/go-playground/validator/tree/v8.18.2.
 type StructValidator interface {
 	// ValidateStruct can receive any kind of type and it should never panic, even if the configuration is not right.
