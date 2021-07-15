@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
   * SYSADM Server
   * @Author  Wayne Wang <net_use@bzhy.com>                                                                                                                                                                                                ↷
@@ -16,6 +17,11 @@
   * @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
   * @Modified Jul 08 2021
 */
+=======
+// Copyright 2020 Gin Core Team. All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+>>>>>>> master
 
 package binding
 
@@ -31,6 +37,29 @@ func TestSliceValidateError(t *testing.T) {
 		want string
 	}{
 		{"has nil elements", sliceValidateError{errors.New("test error"), nil}, "[0]: test error"},
+<<<<<<< HEAD
+=======
+		{"has zero elements", sliceValidateError{}, ""},
+		{"has one element", sliceValidateError{errors.New("test one error")}, "[0]: test one error"},
+		{"has two elements",
+			sliceValidateError{
+				errors.New("first error"),
+				errors.New("second error"),
+			},
+			"[0]: first error\n[1]: second error",
+		},
+		{"has many elements",
+			sliceValidateError{
+				errors.New("first error"),
+				errors.New("second error"),
+				nil,
+				nil,
+				nil,
+				errors.New("last error"),
+			},
+			"[0]: first error\n[1]: second error\n[5]: last error",
+		},
+>>>>>>> master
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

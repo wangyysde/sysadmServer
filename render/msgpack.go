@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * SYSADM Server
  * @Author  Wayne Wang <net_use@bzhy.com>
@@ -17,6 +18,13 @@
  * @Modified Apr 20 2021
  **/
 
+=======
+// Copyright 2017 Manu Martinez-Almeida.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
+//go:build !nomsgpack
+>>>>>>> master
 // +build !nomsgpack
 
 package render
@@ -27,6 +35,11 @@ import (
 	"github.com/ugorji/go/codec"
 )
 
+<<<<<<< HEAD
+=======
+// Check interface implemented here to support go build tag nomsgpack.
+// See: https://github.com/gin-gonic/gin/pull/1852/
+>>>>>>> master
 var (
 	_ Render = MsgPack{}
 )

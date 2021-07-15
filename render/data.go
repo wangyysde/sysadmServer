@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
 * SYSADM Server
 * @Author  Wayne Wang <net_use@bzhy.com>
@@ -16,6 +17,11 @@
 * @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
 * @Modified Apr 20 2021
 **/
+=======
+// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+>>>>>>> master
 
 package render
 

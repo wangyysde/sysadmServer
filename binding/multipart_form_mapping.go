@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
   * SYSADM Server
   * @Author  Wayne Wang <net_use@bzhy.com>                                                                                                                                                                                                ↷
@@ -16,6 +17,11 @@
   * @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
   * @Modified Jul 09 2021
 */
+=======
+// Copyright 2019 Gin Core Team.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+>>>>>>> master
 
 package binding
 
@@ -30,8 +36,21 @@ type multipartRequest http.Request
 
 var _ setter = (*multipartRequest)(nil)
 
+<<<<<<< HEAD
 // TrySet tries to set a value by the multipart request with the binding a form file
 func (r *multipartRequest) TrySet(value reflect.Value, field reflect.StructField, key string, opt setOptions) (isSetted bool, err error) {
+=======
+var (
+	// ErrMultiFileHeader multipart.FileHeader invalid
+	ErrMultiFileHeader = errors.New("unsupported field type for multipart.FileHeader")
+
+	// ErrMultiFileHeaderLenInvalid array for []*multipart.FileHeader len invalid
+	ErrMultiFileHeaderLenInvalid = errors.New("unsupported len of array for []*multipart.FileHeader")
+)
+
+// TrySet tries to set a value by the multipart request with the binding a form file
+func (r *multipartRequest) TrySet(value reflect.Value, field reflect.StructField, key string, opt setOptions) (bool, error) {
+>>>>>>> master
 	if files := r.MultipartForm.File[key]; len(files) != 0 {
 		return setByMultipartFormFile(value, field, files)
 	}
@@ -64,12 +83,20 @@ func setByMultipartFormFile(value reflect.Value, field reflect.StructField, file
 	case reflect.Array:
 		return setArrayOfMultipartFormFiles(value, field, files)
 	}
+<<<<<<< HEAD
 	return false, errors.New("unsupported field type for multipart.FileHeader")
+=======
+	return false, ErrMultiFileHeader
+>>>>>>> master
 }
 
 func setArrayOfMultipartFormFiles(value reflect.Value, field reflect.StructField, files []*multipart.FileHeader) (isSetted bool, err error) {
 	if value.Len() != len(files) {
+<<<<<<< HEAD
 		return false, errors.New("unsupported len of array for []*multipart.FileHeader")
+=======
+		return false, ErrMultiFileHeaderLenInvalid
+>>>>>>> master
 	}
 	for i := range files {
 		setted, err := setByMultipartFormFile(value.Index(i), field, files[i:i+1])

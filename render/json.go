@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
 * SYSADM Server
 * @Author  Wayne Wang <net_use@bzhy.com>
@@ -16,6 +17,11 @@
 * @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
 * @Modified Apr 20 2021
 **/
+=======
+// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+>>>>>>> master
 
 package render
 
@@ -25,15 +31,23 @@ import (
 	"html/template"
 	"net/http"
 
+<<<<<<< HEAD
 	"github.com/wangyysde/sysadmServer/internal/bytesconv"
 	"github.com/wangyysde/sysadmServer/internal/json"
 	"github.com/wangyysde/sysadmServer/sysadmLogger"
+=======
+	"github.com/gin-gonic/gin/internal/bytesconv"
+	"github.com/gin-gonic/gin/internal/json"
+>>>>>>> master
 )
 
 // JSON contains the given interface object.
 type JSON struct {
 	Data interface{}
+<<<<<<< HEAD
 	logWriter sysadmLogger.SysadmLogWriter
+=======
+>>>>>>> master
 }
 
 // IndentedJSON contains the given interface object.
@@ -63,18 +77,30 @@ type PureJSON struct {
 	Data interface{}
 }
 
+<<<<<<< HEAD
 var jsonContentType = []string{"application/json; charset=utf-8"}
 var jsonpContentType = []string{"application/javascript; charset=utf-8"}
 var jsonAsciiContentType = []string{"application/json"}
+=======
+var (
+	jsonContentType      = []string{"application/json; charset=utf-8"}
+	jsonpContentType     = []string{"application/javascript; charset=utf-8"}
+	jsonAsciiContentType = []string{"application/json"}
+)
+>>>>>>> master
 
 // Render (JSON) writes data with custom ContentType.
 func (r JSON) Render(w http.ResponseWriter) (err error) {
 	if err = WriteJSON(w, r.Data); err != nil {
+<<<<<<< HEAD
 		if r.logWriter != nil {
 			r.logWriter.ErrorWriter("panic",fmt.Sprintf("%s",err))
 		} else {
 			panic(err)
 		}
+=======
+		panic(err)
+>>>>>>> master
 	}
 	return
 }

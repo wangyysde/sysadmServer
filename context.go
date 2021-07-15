@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // sysadmServer 
 // @Author  Wayne Wang <net_use@bzhy.com>
 // @Copyright Bzhy Network
@@ -12,6 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html* @Modified Apr 20 2021 
+=======
+// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+>>>>>>> master
 
 package sysadmServer
 

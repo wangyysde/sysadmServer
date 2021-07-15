@@ -1,4 +1,12 @@
+<<<<<<< HEAD
 
+=======
+// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
+//go:build !nomsgpack
+>>>>>>> master
 // +build !nomsgpack
 
 package binding
@@ -44,8 +52,13 @@ type BindingUri interface {
 
 // StructValidator is the minimal interface which needs to be implemented in
 // order for it to be used as the validator engine for ensuring the correctness
+<<<<<<< HEAD
 // of the request. sysadmServer provides a default implementation for this using
 // https://github.com/go-playground/validator/tree/v8.18.2.
+=======
+// of the request. Gin provides a default implementation for this using
+// https://github.com/go-playground/validator/tree/v10.6.1.
+>>>>>>> master
 type StructValidator interface {
 	// ValidateStruct can receive any kind of type and it should never panic, even if the configuration is not right.
 	// If the received type is a slice|array, the validation should be performed travel on every element.
@@ -61,7 +74,11 @@ type StructValidator interface {
 }
 
 // Validator is the default validator which implements the StructValidator
+<<<<<<< HEAD
 // interface. It uses https://github.com/go-playground/validator/tree/v8.18.2
+=======
+// interface. It uses https://github.com/go-playground/validator/tree/v10.6.1
+>>>>>>> master
 // under the hood.
 var Validator StructValidator = &defaultValidator{}
 

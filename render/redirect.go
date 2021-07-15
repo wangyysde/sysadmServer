@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
 * SYSADM Server
 * @Author  Wayne Wang <net_use@bzhy.com>
@@ -16,14 +17,22 @@
 * @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
 * @Modified Apr 20 2021
 **/
+=======
+// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+>>>>>>> master
 
 package render
 
 import (
 	"fmt"
 	"net/http"
+<<<<<<< HEAD
 	"github.com/wangyysde/sysadmServer/sysadmLogger"
 
+=======
+>>>>>>> master
 )
 
 // Redirect contains the http request reference and redirects status code and location.
@@ -31,12 +40,16 @@ type Redirect struct {
 	Code     int
 	Request  *http.Request
 	Location string
+<<<<<<< HEAD
 	logWriter sysadmLogger.SysadmLogWriter
+=======
+>>>>>>> master
 }
 
 // Render (Redirect) redirects the http request to new location and writes redirect response.
 func (r Redirect) Render(w http.ResponseWriter) error {
 	if (r.Code < http.StatusMultipleChoices || r.Code > http.StatusPermanentRedirect) && r.Code != http.StatusCreated {
+<<<<<<< HEAD
 		if r.logWriter != nil {
 			r.logWriter.ErrorWriter("error", fmt.Sprintf("Cannot redirect with status code %d", r.Code))
 		} else {
@@ -46,6 +59,9 @@ func (r Redirect) Render(w http.ResponseWriter) error {
 				panic(fmt.Sprintf("Cannot redirect with status code %d", r.Code))
 			}
 		}
+=======
+		panic(fmt.Sprintf("Cannot redirect with status code %d", r.Code))
+>>>>>>> master
 	}
 	http.Redirect(w, r.Request, r.Location, r.Code)
 	return nil

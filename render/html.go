@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
 * SYSADM Server
 * @Author  Wayne Wang <net_use@bzhy.com>
@@ -16,14 +17,22 @@
 * @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
 * @Modified Apr 20 2021
 **/
+=======
+// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+>>>>>>> master
 
 package render
 
 import (
 	"html/template"
 	"net/http"
+<<<<<<< HEAD
 
 	"github.com/wangyysde/sysadmServer/sysadmLogger"
+=======
+>>>>>>> master
 )
 
 // Delims represents a set of Left and Right delimiters for HTML template rendering.
@@ -52,7 +61,10 @@ type HTMLDebug struct {
 	Glob    string
 	Delims  Delims
 	FuncMap template.FuncMap
+<<<<<<< HEAD
 	logWriter sysadmLogger.SysadmLogWriter
+=======
+>>>>>>> master
 }
 
 // HTML contains template reference and its name with given interface object.
@@ -91,6 +103,7 @@ func (r HTMLDebug) loadTemplate() *template.Template {
 	if r.Glob != "" {
 		return template.Must(template.New("").Delims(r.Delims.Left, r.Delims.Right).Funcs(r.FuncMap).ParseGlob(r.Glob))
 	}
+<<<<<<< HEAD
 	//panic("the HTML debug render was created without files or glob pattern")
 	if r.logWriter != nil {
 		r.logWriter.ErrorWriter("panic", "the HTML debug render was created without files or glob pattern")
@@ -98,6 +111,9 @@ func (r HTMLDebug) loadTemplate() *template.Template {
 		panic("the HTML debug render was created without files or glob pattern")
 	}
 	return nil
+=======
+	panic("the HTML debug render was created without files or glob pattern")
+>>>>>>> master
 }
 
 // Render (HTML) executes template and writes its result with custom ContentType for response.

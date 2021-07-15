@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
   * SYSADM Server
   * @Author  Wayne Wang <net_use@bzhy.com>                                                                                                                                                                                                ↷
@@ -17,16 +18,29 @@
   * @Modified Jul 09 2021
 */
 
+=======
+// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+>>>>>>> master
 
 package binding
 
 import (
 	"bytes"
+<<<<<<< HEAD
 	"fmt"
 	"io"
 	"net/http"
 
 	"github.com/wangyysde/sysadmServer/internal/json"
+=======
+	"errors"
+	"io"
+	"net/http"
+
+	"github.com/gin-gonic/gin/internal/json"
+>>>>>>> master
 )
 
 // EnableDecoderUseNumber is used to call the UseNumber method on the JSON
@@ -48,7 +62,11 @@ func (jsonBinding) Name() string {
 
 func (jsonBinding) Bind(req *http.Request, obj interface{}) error {
 	if req == nil || req.Body == nil {
+<<<<<<< HEAD
 		return fmt.Errorf("invalid request")
+=======
+		return errors.New("invalid request")
+>>>>>>> master
 	}
 	return decodeJSON(req.Body, obj)
 }

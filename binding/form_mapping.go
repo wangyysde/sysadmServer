@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
   * SYSADM Server
   * @Author  Wayne Wang <net_use@bzhy.com>                                                                                                                                                                                                ↷
@@ -16,6 +17,11 @@
   * @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
   * @Modified Jul 09 2021
 */
+=======
+// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+>>>>>>> master
 
 package binding
 
@@ -27,11 +33,27 @@ import (
 	"strings"
 	"time"
 
+<<<<<<< HEAD
 	"github.com/wangyysde/sysadmServer/internal/bytesconv"
 	"github.com/wangyysde/sysadmServer/internal/json"
 )
 
 var errUnknownType = errors.New("unknown type")
+=======
+	"github.com/gin-gonic/gin/internal/bytesconv"
+	"github.com/gin-gonic/gin/internal/json"
+)
+
+var (
+	errUnknownType = errors.New("unknown type")
+
+	// ErrConvertMapStringSlice can not covert to map[string][]string
+	ErrConvertMapStringSlice = errors.New("can not convert to map slices of strings")
+
+	// ErrConvertToMapString can not convert to map[string]string
+	ErrConvertToMapString = errors.New("can not convert to map of strings")
+)
+>>>>>>> master
 
 func mapUri(ptr interface{}, m map[string][]string) error {
 	return mapFormByTag(ptr, m, "uri")
@@ -41,6 +63,13 @@ func mapForm(ptr interface{}, form map[string][]string) error {
 	return mapFormByTag(ptr, form, "form")
 }
 
+<<<<<<< HEAD
+=======
+func MapFormWithTag(ptr interface{}, form map[string][]string, tag string) error {
+	return mapFormByTag(ptr, form, tag)
+}
+
+>>>>>>> master
 var emptyField = reflect.StructField{}
 
 func mapFormByTag(ptr interface{}, form map[string][]string, tag string) error {
@@ -124,7 +153,11 @@ func mapping(value reflect.Value, field reflect.StructField, setter setter, tag 
 			if sf.PkgPath != "" && !sf.Anonymous { // unexported
 				continue
 			}
+<<<<<<< HEAD
 			ok, err := mapping(value.Field(i), tValue.Field(i), setter, tag)
+=======
+			ok, err := mapping(value.Field(i), sf, setter, tag)
+>>>>>>> master
 			if err != nil {
 				return false, err
 			}
@@ -386,7 +419,11 @@ func setFormMap(ptr interface{}, form map[string][]string) error {
 	if el.Kind() == reflect.Slice {
 		ptrMap, ok := ptr.(map[string][]string)
 		if !ok {
+<<<<<<< HEAD
 			return errors.New("cannot convert to map slices of strings")
+=======
+			return ErrConvertMapStringSlice
+>>>>>>> master
 		}
 		for k, v := range form {
 			ptrMap[k] = v
@@ -397,7 +434,11 @@ func setFormMap(ptr interface{}, form map[string][]string) error {
 
 	ptrMap, ok := ptr.(map[string]string)
 	if !ok {
+<<<<<<< HEAD
 		return errors.New("cannot convert to map of strings")
+=======
+		return ErrConvertToMapString
+>>>>>>> master
 	}
 	for k, v := range form {
 		ptrMap[k] = v[len(v)-1] // pick last

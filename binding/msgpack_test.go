@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //
 // SYSADM Server
 //  @Author  Wayne Wang <net_use@bzhy.com>                                                                                                                                                                                                ↷ @Copyright Bzhy Network
@@ -20,6 +21,15 @@
 // +build !nomsgpack
 
 
+=======
+// Copyright 2019 Gin Core Team. All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
+//go:build !nomsgpack
+// +build !nomsgpack
+
+>>>>>>> master
 package binding
 
 import (

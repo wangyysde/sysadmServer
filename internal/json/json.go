@@ -2,13 +2,19 @@
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 
+<<<<<<< HEAD
 // +build !jsoniter
+=======
+//go:build !jsoniter && !go_json
+// +build !jsoniter,!go_json
+>>>>>>> master
 
 package json
 
 import "encoding/json"
 
 var (
+<<<<<<< HEAD
 	// Marshal is exported by sysadmServer/json package.
 	Marshal = json.Marshal
 	// Unmarshal is exported by sysadmServer/json package.
@@ -18,5 +24,16 @@ var (
 	// NewDecoder is exported by sysadmServer/json package.
 	NewDecoder = json.NewDecoder
 	// NewEncoder is exported by sysadmServer/json package.
+=======
+	// Marshal is exported by gin/json package.
+	Marshal = json.Marshal
+	// Unmarshal is exported by gin/json package.
+	Unmarshal = json.Unmarshal
+	// MarshalIndent is exported by gin/json package.
+	MarshalIndent = json.MarshalIndent
+	// NewDecoder is exported by gin/json package.
+	NewDecoder = json.NewDecoder
+	// NewEncoder is exported by gin/json package.
+>>>>>>> master
 	NewEncoder = json.NewEncoder
 )

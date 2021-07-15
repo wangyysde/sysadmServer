@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
   * SYSADM Server
   * @Author  Wayne Wang <net_use@bzhy.com>                                                                                                                                                                                                ↷
@@ -16,6 +17,11 @@
   * @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
   * @Modified Jul 09 2021
 */
+=======
+// Copyright 2019 Gin Core Team.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+>>>>>>> master
 
 package binding
 
@@ -139,7 +145,11 @@ func createRequestMultipartFiles(t *testing.T, files ...testFile) *http.Request 
 
 func assertMultipartFileHeader(t *testing.T, fh *multipart.FileHeader, file testFile) {
 	assert.Equal(t, file.Filename, fh.Filename)
+<<<<<<< HEAD
 	// assert.Equal(t, int64(len(file.Content)), fh.Size) // fh.Size does not exist on go1.8
+=======
+	assert.Equal(t, int64(len(file.Content)), fh.Size)
+>>>>>>> master
 
 	fl, err := fh.Open()
 	assert.NoError(t, err)

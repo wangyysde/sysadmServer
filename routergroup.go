@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
   * SYSADM Server
 	* @Author  Wayne Wang <net_use@bzhy.com>
@@ -16,6 +17,11 @@
 	* @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
 	* @Modified Jun 12 2021
 **/
+=======
+// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+>>>>>>> master
 
 package sysadmServer
 
@@ -24,7 +30,15 @@ import (
 	"path"
 	"regexp"
 	"strings"
+<<<<<<< HEAD
 //	"github.com/wangyysde/sysadmServer/sysadmlogger"
+=======
+)
+
+var (
+	// reg match english letters for http method name
+	regEnLetter = regexp.MustCompile("^[A-Z]+$")
+>>>>>>> master
 )
 
 // IRouter defines all router handle interface includes single and group router.
@@ -103,6 +117,7 @@ func (group *RouterGroup) handle(httpMethod, relativePath string, handlers Handl
 // frequently used, non-standardized or custom methods (e.g. for internal
 // communication with a proxy).
 func (group *RouterGroup) Handle(httpMethod, relativePath string, handlers ...HandlerFunc) IRoutes {
+<<<<<<< HEAD
 	if matches, err := regexp.MatchString("^[A-Z]+$", httpMethod); !matches || err != nil {
 		logWriter := group.engine.logWriter
 		if logWriter != nil {
@@ -110,6 +125,10 @@ func (group *RouterGroup) Handle(httpMethod, relativePath string, handlers ...Ha
 			return nil
 		}
 		return nil 
+=======
+	if matched := regEnLetter.MatchString(httpMethod); !matched {
+		panic("http method " + httpMethod + " is not valid")
+>>>>>>> master
 	}
 	return group.handle(httpMethod, relativePath, handlers)
 }
@@ -168,12 +187,16 @@ func (group *RouterGroup) Any(relativePath string, handlers ...HandlerFunc) IRou
 // router.StaticFile("favicon.ico", "./resources/favicon.ico")
 func (group *RouterGroup) StaticFile(relativePath, filepath string) IRoutes {
 	if strings.Contains(relativePath, ":") || strings.Contains(relativePath, "*") {
+<<<<<<< HEAD
 		logWriter := group.engine.logWriter
 		if logWriter != nil {
 			logWriter.errorLogger("error","URL parameters can not be used when serving a static file")
 			return nil
 		}
 		return nil
+=======
+		panic("URL parameters can not be used when serving a static file")
+>>>>>>> master
 	}
 	handler := func(c *Context) {
 		c.File(filepath)
@@ -194,6 +217,7 @@ func (group *RouterGroup) Static(relativePath, root string) IRoutes {
 }
 
 // StaticFS works just like `Static()` but a custom `http.FileSystem` can be used instead.
+<<<<<<< HEAD
 // Gin by default user: sysadmServer.Dir()
 func (group *RouterGroup) StaticFS(relativePath string, fs http.FileSystem) IRoutes {
 	if strings.Contains(relativePath, ":") || strings.Contains(relativePath, "*") {
@@ -201,6 +225,12 @@ func (group *RouterGroup) StaticFS(relativePath string, fs http.FileSystem) IRou
 		if logWriter != nil {
 			logWriter.errorLogger("error","URL parameters can not be used when serving a static folder")
 		}
+=======
+// Gin by default user: gin.Dir()
+func (group *RouterGroup) StaticFS(relativePath string, fs http.FileSystem) IRoutes {
+	if strings.Contains(relativePath, ":") || strings.Contains(relativePath, "*") {
+		panic("URL parameters can not be used when serving a static folder")
+>>>>>>> master
 	}
 	handler := group.createStaticHandler(relativePath, fs)
 	urlPattern := path.Join(relativePath, "/*filepath")
@@ -238,6 +268,7 @@ func (group *RouterGroup) createStaticHandler(relativePath string, fs http.FileS
 
 func (group *RouterGroup) combineHandlers(handlers HandlersChain) HandlersChain {
 	finalSize := len(group.Handlers) + len(handlers)
+<<<<<<< HEAD
 	if finalSize >= int(abortIndex) {
 		logWriter := group.engine.logWriter
 		if logWriter != nil {
@@ -245,6 +276,9 @@ func (group *RouterGroup) combineHandlers(handlers HandlersChain) HandlersChain 
 			return nil
 		}
 	}
+=======
+	assert1(finalSize < int(abortIndex), "too many handlers")
+>>>>>>> master
 	mergedHandlers := make(HandlersChain, finalSize)
 	copy(mergedHandlers, group.Handlers)
 	copy(mergedHandlers[len(group.Handlers):], handlers)

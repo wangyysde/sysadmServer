@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**                                                                                                                                                                                                                                        
     * SYSADM Server
     * @Author  Wayne Wang <net_use@bzhy.com>
@@ -16,6 +17,11 @@
     * @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
     * @Modified Jul 05 2021
 **/
+=======
+// Copyright 2013 Julien Schmidt. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be found
+// at https://github.com/julienschmidt/httprouter/blob/master/LICENSE
+>>>>>>> master
 
 package sysadmServer
 
@@ -45,8 +51,13 @@ type Param struct {
 // It is therefore safe to read values by the index.
 type Params []Param
 
+<<<<<<< HEAD
 // Get returns the value of the first Param which key matches the given name.
 // If no matching Param is found, an empty string is returned.
+=======
+// Get returns the value of the first Param which key matches the given name and a boolean true.
+// If no matching Param is found, an empty string is returned and a boolean false .
+>>>>>>> master
 func (ps Params) Get(name string) (string, bool) {
 	for _, entry := range ps {
 		if entry.Key == name {
@@ -133,6 +144,14 @@ type node struct {
 	fullPath  string
 }
 
+<<<<<<< HEAD
+=======
+type skip struct {
+	path      string
+	paramNode *node
+}
+
+>>>>>>> master
 // Increments priority of the given child and reorders if necessary
 func (n *node) incrementChildPrio(pos int) int {
 	cs := n.children
@@ -415,6 +434,11 @@ type nodeValue struct {
 // made if a handle exists with an extra (without the) trailing slash for the
 // given path.
 func (n *node) getValue(path string, params *Params, unescape bool) (value nodeValue) {
+<<<<<<< HEAD
+=======
+	var skipped *skip
+
+>>>>>>> master
 walk: // Outer loop for walking the tree
 	for {
 		prefix := n.path
@@ -426,6 +450,24 @@ walk: // Outer loop for walking the tree
 				idxc := path[0]
 				for i, c := range []byte(n.indices) {
 					if c == idxc {
+<<<<<<< HEAD
+=======
+						if strings.HasPrefix(n.children[len(n.children)-1].path, ":") {
+							skipped = &skip{
+								path: prefix + path,
+								paramNode: &node{
+									path:      n.path,
+									wildChild: n.wildChild,
+									nType:     n.nType,
+									priority:  n.priority,
+									children:  n.children,
+									handlers:  n.handlers,
+									fullPath:  n.fullPath,
+								},
+							}
+						}
+
+>>>>>>> master
 						n = n.children[i]
 						continue walk
 					}
@@ -452,7 +494,11 @@ walk: // Outer loop for walking the tree
 					}
 
 					// Save param value
+<<<<<<< HEAD
 					if params != nil {
+=======
+					if params != nil && cap(*params) > 0 {
+>>>>>>> master
 						if value.params == nil {
 							value.params = params
 						}
@@ -480,7 +526,11 @@ walk: // Outer loop for walking the tree
 						}
 
 						// ... but we can't
+<<<<<<< HEAD
 						value.tsr = (len(path) == end+1)
+=======
+						value.tsr = len(path) == end+1
+>>>>>>> master
 						return
 					}
 
@@ -492,7 +542,11 @@ walk: // Outer loop for walking the tree
 						// No handle found. Check if a handle for this path + a
 						// trailing slash exists for TSR recommendation
 						n = n.children[0]
+<<<<<<< HEAD
 						value.tsr = (n.path == "/" && n.handlers != nil)
+=======
+						value.tsr = n.path == "/" && n.handlers != nil
+>>>>>>> master
 					}
 					return
 
@@ -557,6 +611,16 @@ walk: // Outer loop for walking the tree
 			return
 		}
 
+<<<<<<< HEAD
+=======
+		if path != "/" && skipped != nil && strings.HasSuffix(skipped.path, path) {
+			path = skipped.path
+			n = skipped.paramNode
+			skipped = nil
+			continue walk
+		}
+
+>>>>>>> master
 		// Nothing found. We can recommend to redirect to the same URL with an
 		// extra trailing slash if a leaf exists for that path
 		value.tsr = (path == "/") ||

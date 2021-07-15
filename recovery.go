@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**                                                                                                                                                                                                                                        
     * SYSADM Server
     * @Author  Wayne Wang <net_use@bzhy.com>
@@ -16,14 +17,25 @@
     * @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
     * @Modified Jun 09 2021
 **/
+=======
+// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+>>>>>>> master
 
 package sysadmServer
 
 import (
 	"bytes"
 	"fmt"
+<<<<<<< HEAD
 //	"io"
 	"io/ioutil"
+=======
+	"io"
+	"io/ioutil"
+	"log"
+>>>>>>> master
 	"net"
 	"net/http"
 	"net/http/httputil"
@@ -31,7 +43,10 @@ import (
 	"runtime"
 	"strings"
 	"time"
+<<<<<<< HEAD
 	"github.com/wangyysde/sysadmServer/sysadmLogger"
+=======
+>>>>>>> master
 )
 
 var (
@@ -46,6 +61,7 @@ type RecoveryFunc func(c *Context, err interface{})
 
 // Recovery returns a middleware that recovers from any panics and writes a 500 if there was one.
 func Recovery() HandlerFunc {
+<<<<<<< HEAD
 	return RecoveryWithWriter(LoggerWriter)
 }
 
@@ -66,6 +82,30 @@ func RecoveryWithWriter(sysadmLogger sysadmLogger.SysadmLogWriter, recovery ...R
 
 // CustomRecoveryWithWriter returns a middleware for a given writer that recovers from any panics and calls the provided handle func to handle it.
 func CustomRecoveryWithWriter(sysadmLogger sysadmLogger.SysadmLogWriter, handle RecoveryFunc) HandlerFunc {
+=======
+	return RecoveryWithWriter(DefaultErrorWriter)
+}
+
+// CustomRecovery returns a middleware that recovers from any panics and calls the provided handle func to handle it.
+func CustomRecovery(handle RecoveryFunc) HandlerFunc {
+	return RecoveryWithWriter(DefaultErrorWriter, handle)
+}
+
+// RecoveryWithWriter returns a middleware for a given writer that recovers from any panics and writes a 500 if there was one.
+func RecoveryWithWriter(out io.Writer, recovery ...RecoveryFunc) HandlerFunc {
+	if len(recovery) > 0 {
+		return CustomRecoveryWithWriter(out, recovery[0])
+	}
+	return CustomRecoveryWithWriter(out, defaultHandleRecovery)
+}
+
+// CustomRecoveryWithWriter returns a middleware for a given writer that recovers from any panics and calls the provided handle func to handle it.
+func CustomRecoveryWithWriter(out io.Writer, handle RecoveryFunc) HandlerFunc {
+	var logger *log.Logger
+	if out != nil {
+		logger = log.New(out, "\n\n\x1b[31m", log.LstdFlags)
+	}
+>>>>>>> master
 	return func(c *Context) {
 		defer func() {
 			if err := recover(); err != nil {
@@ -79,7 +119,11 @@ func CustomRecoveryWithWriter(sysadmLogger sysadmLogger.SysadmLogWriter, handle 
 						}
 					}
 				}
+<<<<<<< HEAD
 				if sysadmLogger != nil {
+=======
+				if logger != nil {
+>>>>>>> master
 					stack := stack(3)
 					httpRequest, _ := httputil.DumpRequest(c.Request, false)
 					headers := strings.Split(string(httpRequest), "\r\n")
@@ -91,6 +135,7 @@ func CustomRecoveryWithWriter(sysadmLogger sysadmLogger.SysadmLogWriter, handle 
 					}
 					headersToStr := strings.Join(headers, "\r\n")
 					if brokenPipe {
+<<<<<<< HEAD
 						sysadmLogger.ErrorWriter("error",fmt.Sprintf("%v\n %s", err, headersToStr))
 					} else if IsDebugging() {
 						sysadmLogger.ErrorWriter("warn", fmt.Sprintf("[Recovery] %s panic recovered:\n%s\n%v\n%s",
@@ -98,6 +143,15 @@ func CustomRecoveryWithWriter(sysadmLogger sysadmLogger.SysadmLogWriter, handle 
 					} else {
 						sysadmLogger.ErrorWriter("warn",fmt.Sprintf("[Recovery] %s panic recovered:\n%s\n%s",
 							timeFormat(time.Now()), err, stack))
+=======
+						logger.Printf("%s\n%s%s", err, headersToStr, reset)
+					} else if IsDebugging() {
+						logger.Printf("[Recovery] %s panic recovered:\n%s\n%s\n%s%s",
+							timeFormat(time.Now()), headersToStr, err, stack, reset)
+					} else {
+						logger.Printf("[Recovery] %s panic recovered:\n%s\n%s%s",
+							timeFormat(time.Now()), err, stack, reset)
+>>>>>>> master
 					}
 				}
 				if brokenPipe {
@@ -178,7 +232,13 @@ func function(pc uintptr) []byte {
 	return name
 }
 
+<<<<<<< HEAD
 func timeFormat(t time.Time) string {
 	timeString := t.Format("2006/01/02 - 15:04:05")
 	return timeString
+=======
+// timeFormat returns a customized time string for logger.
+func timeFormat(t time.Time) string {
+	return t.Format("2006/01/02 - 15:04:05")
+>>>>>>> master
 }

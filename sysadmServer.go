@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
 	* SYSADM Server
 	* @Author  Wayne Wang <net_use@bzhy.com>
@@ -16,55 +17,110 @@
 	* @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
 	* @Modified Apr 20 2021
 **/
+=======
+// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+>>>>>>> master
 
 package sysadmServer
 
 import (
+<<<<<<< HEAD
 	"html/template"
 	"net"
 	"sync"
 
 	"github.com/wangyysde/sysadmServer/sysadmLogger"
+=======
+	"fmt"
+	"html/template"
+	"net"
+	"net/http"
+	"os"
+	"path"
+	"strings"
+	"sync"
+
+	"github.com/wangyysde/sysadmServer/internal/bytesconv"
+>>>>>>> master
 	"github.com/wangyysde/sysadmServer/render"
 )
 
 const defaultMultipartMemory = 32 << 20 // 32 MB
 
 var (
+<<<<<<< HEAD
     default404Body = []byte("404 page not found")
     default405Body = []byte("405 method not allowed")
 )
 
 var defaultAppEngine bool
+=======
+	default404Body = []byte("404 page not found")
+	default405Body = []byte("405 method not allowed")
+)
+
+var defaultPlatform string
+
+// HandlerFunc defines the handler used by gin middleware as return value.
+type HandlerFunc func(*Context)
+>>>>>>> master
 
 // HandlersChain defines a HandlerFunc array.
 type HandlersChain []HandlerFunc
 
 // Last returns the last handler in the chain. ie. the last handler is the main one.
 func (c HandlersChain) Last() HandlerFunc {
+<<<<<<< HEAD
     if length := len(c); length > 0 { 
         return c[length-1]
     }   
     return nil 
+=======
+	if length := len(c); length > 0 {
+		return c[length-1]
+	}
+	return nil
+>>>>>>> master
 }
 
 // RouteInfo represents a request route's specification which contains method and path and its handler.
 type RouteInfo struct {
+<<<<<<< HEAD
     Method      string
     Path        string
     Handler     string
     HandlerFunc HandlerFunc
+=======
+	Method      string
+	Path        string
+	Handler     string
+	HandlerFunc HandlerFunc
+>>>>>>> master
 }
 
 // RoutesInfo defines a RouteInfo array.
 type RoutesInfo []RouteInfo
 
+<<<<<<< HEAD
 var _ IRouter = &Engine{}
 
 // HandlerFunc defines the handler used by sysadmServer middleware as return value.
 type HandlerFunc func(*Context)
 
 var LogLevel = [7]string{"panic", "fatal", "error", "warn", "info", "debug", "trace"}
+=======
+// Trusted platforms
+const (
+	// When running on Google App Engine. Trust X-Appengine-Remote-Addr
+	// for determining the client's IP
+	PlatformGoogleAppEngine = "google-app-engine"
+	// When using Cloudflare's CDN. Trust CF-Connecting-IP for determining
+	// the client's IP
+	PlatformCloudflare = "cloudflare"
+)
+>>>>>>> master
 
 // Engine is the framework's instance, it contains the muxer, middleware and configuration settings.
 // Create an instance of Engine, by using New() or Default()
@@ -98,6 +154,7 @@ type Engine struct {
 	HandleMethodNotAllowed bool
 
 	// If enabled, client IP will be parsed from the request's headers that
+<<<<<<< HEAD
 	// match those stored at `(*sysadmServer.Engine).RemoteIPHeaders`. If no IP was
 	// fetched, it falls back to the IP obtained from
 	// `(*sysadmServer.Context).Request.RemoteAddr`.
@@ -115,6 +172,14 @@ type Engine struct {
 	// `true`.
 	TrustedProxies []string
 
+=======
+	// match those stored at `(*gin.Engine).RemoteIPHeaders`. If no IP was
+	// fetched, it falls back to the IP obtained from
+	// `(*gin.Context).Request.RemoteAddr`.
+	ForwardedByClientIP bool
+
+	// DEPRECATED: USE `TrustedPlatform` WITH VALUE `gin.GoogleAppEngine` INSTEAD
+>>>>>>> master
 	// #726 #755 If enabled, it will trust some headers starting with
 	// 'X-AppEngine...' for better integration with that PaaS.
 	AppEngine bool
@@ -127,14 +192,40 @@ type Engine struct {
 	// as url.Path gonna be used, which is already unescaped.
 	UnescapePathValues bool
 
+<<<<<<< HEAD
 	// Value of 'maxMemory' param that is given to http.Request's ParseMultipartForm
 	// method call.
 	MaxMultipartMemory int64
 
+=======
+>>>>>>> master
 	// RemoveExtraSlash a parameter can be parsed from the URL even with extra slashes.
 	// See the PR #1817 and issue #1644
 	RemoveExtraSlash bool
 
+<<<<<<< HEAD
+=======
+	// List of headers used to obtain the client IP when
+	// `(*gin.Engine).ForwardedByClientIP` is `true` and
+	// `(*gin.Context).Request.RemoteAddr` is matched by at least one of the
+	// network origins of `(*gin.Engine).TrustedProxies`.
+	RemoteIPHeaders []string
+
+	// List of network origins (IPv4 addresses, IPv4 CIDRs, IPv6 addresses or
+	// IPv6 CIDRs) from which to trust request's headers that contain
+	// alternative client IP when `(*gin.Engine).ForwardedByClientIP` is
+	// `true`.
+	TrustedProxies []string
+
+	// If set to a constant of value gin.Platform*, trusts the headers set by
+	// that platform, for example to determine the client IP
+	TrustedPlatform string
+
+	// Value of 'maxMemory' param that is given to http.Request's ParseMultipartForm
+	// method call.
+	MaxMultipartMemory int64
+
+>>>>>>> master
 	delims           render.Delims
 	secureJSONPrefix string
 	HTMLRender       render.HTMLRender
@@ -147,12 +238,19 @@ type Engine struct {
 	trees            methodTrees
 	maxParams        uint16
 	trustedCIDRs     []*net.IPNet
+<<<<<<< HEAD
 
 	//logWriter point to implementation of interface sysadmLogWriter
 	logWriter sysadmLogger.SysadmLogWriter
 	
 }
 
+=======
+}
+
+var _ IRouter = &Engine{}
+
+>>>>>>> master
 // New returns a new blank Engine instance without any middleware attached.
 // By default the configuration is:
 // - RedirectTrailingSlash:  true
@@ -162,6 +260,10 @@ type Engine struct {
 // - UseRawPath:             false
 // - UnescapePathValues:     true
 func New() *Engine {
+<<<<<<< HEAD
+=======
+	debugPrintWARNINGNew()
+>>>>>>> master
 	engine := &Engine{
 		RouterGroup: RouterGroup{
 			Handlers: nil,
@@ -175,7 +277,11 @@ func New() *Engine {
 		ForwardedByClientIP:    true,
 		RemoteIPHeaders:        []string{"X-Forwarded-For", "X-Real-IP"},
 		TrustedProxies:         []string{"0.0.0.0/0"},
+<<<<<<< HEAD
 		AppEngine:              defaultAppEngine,
+=======
+		TrustedPlatform:        defaultPlatform,
+>>>>>>> master
 		UseRawPath:             false,
 		RemoveExtraSlash:       false,
 		UnescapePathValues:     true,
@@ -183,13 +289,18 @@ func New() *Engine {
 		trees:                  make(methodTrees, 0, 9),
 		delims:                 render.Delims{Left: "{{", Right: "}}"},
 		secureJSONPrefix:       "while(1);",
+<<<<<<< HEAD
 		logWriter:              nil,
 	}
 
+=======
+	}
+>>>>>>> master
 	engine.RouterGroup.engine = engine
 	engine.pool.New = func() interface{} {
 		return engine.allocateContext()
 	}
+<<<<<<< HEAD
 
 	loger := sysadmlogger.New()
 	engine.logWriter = loger
@@ -205,36 +316,61 @@ func New() *Engine {
 	engine.debugPrintWARNINGNew()
 	return engine
 
+=======
+	return engine
+>>>>>>> master
 }
 
 // Default returns an Engine instance with the Logger and Recovery middleware already attached.
 func Default() *Engine {
+<<<<<<< HEAD
 	engine := New()
 	engine.logWriter.errorLogger("warn","Creating an Engine instance with the Logger and Recovery middleware already attached.")
 	engine.Use(Recovery())
+=======
+	debugPrintWARNINGDefault()
+	engine := New()
+	engine.Use(Logger(), Recovery())
+>>>>>>> master
 	return engine
 }
 
 func (engine *Engine) allocateContext() *Context {
+<<<<<<< HEAD
     v := make(Params, 0, engine.maxParams)
     return &Context{engine: engine, params: &v}
+=======
+	v := make(Params, 0, engine.maxParams)
+	return &Context{engine: engine, params: &v}
+>>>>>>> master
 }
 
 // Delims sets template left and right delims and returns a Engine instance.
 func (engine *Engine) Delims(left, right string) *Engine {
+<<<<<<< HEAD
     engine.delims = render.Delims{Left: left, Right: right}
     return engine
+=======
+	engine.delims = render.Delims{Left: left, Right: right}
+	return engine
+>>>>>>> master
 }
 
 // SecureJsonPrefix sets the secureJSONPrefix used in Context.SecureJSON.
 func (engine *Engine) SecureJsonPrefix(prefix string) *Engine {
+<<<<<<< HEAD
     engine.secureJSONPrefix = prefix
     return engine
+=======
+	engine.secureJSONPrefix = prefix
+	return engine
+>>>>>>> master
 }
 
 // LoadHTMLGlob loads HTML files identified by glob pattern
 // and associates the result with HTML renderer.
 func (engine *Engine) LoadHTMLGlob(pattern string) {
+<<<<<<< HEAD
     left := engine.delims.Left
     right := engine.delims.Right
     templ := template.Must(template.New("").Delims(left, right).Funcs(engine.FuncMap).ParseGlob(pattern))
@@ -246,11 +382,25 @@ func (engine *Engine) LoadHTMLGlob(pattern string) {
     }
 
     engine.SetHTMLTemplate(templ)
+=======
+	left := engine.delims.Left
+	right := engine.delims.Right
+	templ := template.Must(template.New("").Delims(left, right).Funcs(engine.FuncMap).ParseGlob(pattern))
+
+	if IsDebugging() {
+		debugPrintLoadTemplate(templ)
+		engine.HTMLRender = render.HTMLDebug{Glob: pattern, FuncMap: engine.FuncMap, Delims: engine.delims}
+		return
+	}
+
+	engine.SetHTMLTemplate(templ)
+>>>>>>> master
 }
 
 // LoadHTMLFiles loads a slice of HTML files
 // and associates the result with HTML renderer.
 func (engine *Engine) LoadHTMLFiles(files ...string) {
+<<<<<<< HEAD
     if IsDebugging() {
         engine.HTMLRender = render.HTMLDebug{Files: files, FuncMap: engine.FuncMap, Delims: engine.delims}
         return
@@ -258,38 +408,70 @@ func (engine *Engine) LoadHTMLFiles(files ...string) {
 
     templ := template.Must(template.New("").Delims(engine.delims.Left, engine.delims.Right).Funcs(engine.FuncMap).ParseFiles(files...))
     engine.SetHTMLTemplate(templ)
+=======
+	if IsDebugging() {
+		engine.HTMLRender = render.HTMLDebug{Files: files, FuncMap: engine.FuncMap, Delims: engine.delims}
+		return
+	}
+
+	templ := template.Must(template.New("").Delims(engine.delims.Left, engine.delims.Right).Funcs(engine.FuncMap).ParseFiles(files...))
+	engine.SetHTMLTemplate(templ)
+>>>>>>> master
 }
 
 // SetHTMLTemplate associate a template with HTML renderer.
 func (engine *Engine) SetHTMLTemplate(templ *template.Template) {
+<<<<<<< HEAD
     if len(engine.trees) > 0 {
         debugPrintWARNINGSetHTMLTemplate()
     }
 
     engine.HTMLRender = render.HTMLProduction{Template: templ.Funcs(engine.FuncMap)}
+=======
+	if len(engine.trees) > 0 {
+		debugPrintWARNINGSetHTMLTemplate()
+	}
+
+	engine.HTMLRender = render.HTMLProduction{Template: templ.Funcs(engine.FuncMap)}
+>>>>>>> master
 }
 
 // SetFuncMap sets the FuncMap used for template.FuncMap.
 func (engine *Engine) SetFuncMap(funcMap template.FuncMap) {
+<<<<<<< HEAD
     engine.FuncMap = funcMap
+=======
+	engine.FuncMap = funcMap
+>>>>>>> master
 }
 
 // NoRoute adds handlers for NoRoute. It return a 404 code by default.
 func (engine *Engine) NoRoute(handlers ...HandlerFunc) {
+<<<<<<< HEAD
     engine.noRoute = handlers
     engine.rebuild404Handlers()
+=======
+	engine.noRoute = handlers
+	engine.rebuild404Handlers()
+>>>>>>> master
 }
 
 // NoMethod sets the handlers called when... TODO.
 func (engine *Engine) NoMethod(handlers ...HandlerFunc) {
+<<<<<<< HEAD
     engine.noMethod = handlers
     engine.rebuild405Handlers()
+=======
+	engine.noMethod = handlers
+	engine.rebuild405Handlers()
+>>>>>>> master
 }
 
 // Use attaches a global middleware to the router. ie. the middleware attached though Use() will be
 // included in the handlers chain for every single request. Even 404, 405, static files...
 // For example, this is the right place for a logger or error management middleware.
 func (engine *Engine) Use(middleware ...HandlerFunc) IRoutes {
+<<<<<<< HEAD
     engine.RouterGroup.Use(middleware...)
     engine.rebuild404Handlers()
     engine.rebuild405Handlers()
@@ -306,6 +488,22 @@ func (engine *Engine) rebuild405Handlers() {
 
 
 
+=======
+	engine.RouterGroup.Use(middleware...)
+	engine.rebuild404Handlers()
+	engine.rebuild405Handlers()
+	return engine
+}
+
+func (engine *Engine) rebuild404Handlers() {
+	engine.allNoRoute = engine.combineHandlers(engine.noRoute)
+}
+
+func (engine *Engine) rebuild405Handlers() {
+	engine.allNoMethod = engine.combineHandlers(engine.noMethod)
+}
+
+>>>>>>> master
 func (engine *Engine) addRoute(method, path string, handlers HandlersChain) {
 	assert1(path[0] == '/', "path must begin with '/'")
 	assert1(method != "", "HTTP method can not be empty")
@@ -359,11 +557,19 @@ func iterate(path, method string, routes RoutesInfo, root *node) RoutesInfo {
 func (engine *Engine) Run(addr ...string) (err error) {
 	defer func() { debugPrintError(err) }()
 
+<<<<<<< HEAD
 	trustedCIDRs, err := engine.prepareTrustedCIDRs()
 	if err != nil {
 		return err
 	}
 	engine.trustedCIDRs = trustedCIDRs
+=======
+	err = engine.parseTrustedProxies()
+	if err != nil {
+		return err
+	}
+
+>>>>>>> master
 	address := resolveAddress(addr)
 	debugPrint("Listening and serving HTTP on %s\n", address)
 	err = http.ListenAndServe(address, engine)
@@ -399,6 +605,22 @@ func (engine *Engine) prepareTrustedCIDRs() ([]*net.IPNet, error) {
 	return cidr, nil
 }
 
+<<<<<<< HEAD
+=======
+// SetTrustedProxies  set Engine.TrustedProxies
+func (engine *Engine) SetTrustedProxies(trustedProxies []string) error {
+	engine.TrustedProxies = trustedProxies
+	return engine.parseTrustedProxies()
+}
+
+// parseTrustedProxies parse Engine.TrustedProxies to Engine.trustedCIDRs
+func (engine *Engine) parseTrustedProxies() error {
+	trustedCIDRs, err := engine.prepareTrustedCIDRs()
+	engine.trustedCIDRs = trustedCIDRs
+	return err
+}
+
+>>>>>>> master
 // parseIP parse a string representation of an IP and returns a net.IP with the
 // minimum byte representation or nil if input is invalid.
 func parseIP(ip string) net.IP {
@@ -420,6 +642,14 @@ func (engine *Engine) RunTLS(addr, certFile, keyFile string) (err error) {
 	debugPrint("Listening and serving HTTPS on %s\n", addr)
 	defer func() { debugPrintError(err) }()
 
+<<<<<<< HEAD
+=======
+	err = engine.parseTrustedProxies()
+	if err != nil {
+		return err
+	}
+
+>>>>>>> master
 	err = http.ListenAndServeTLS(addr, certFile, keyFile, engine)
 	return
 }
@@ -431,6 +661,14 @@ func (engine *Engine) RunUnix(file string) (err error) {
 	debugPrint("Listening and serving HTTP on unix:/%s", file)
 	defer func() { debugPrintError(err) }()
 
+<<<<<<< HEAD
+=======
+	err = engine.parseTrustedProxies()
+	if err != nil {
+		return err
+	}
+
+>>>>>>> master
 	listener, err := net.Listen("unix", file)
 	if err != nil {
 		return
@@ -449,6 +687,14 @@ func (engine *Engine) RunFd(fd int) (err error) {
 	debugPrint("Listening and serving HTTP on fd@%d", fd)
 	defer func() { debugPrintError(err) }()
 
+<<<<<<< HEAD
+=======
+	err = engine.parseTrustedProxies()
+	if err != nil {
+		return err
+	}
+
+>>>>>>> master
 	f := os.NewFile(uintptr(fd), fmt.Sprintf("fd@%d", fd))
 	listener, err := net.FileListener(f)
 	if err != nil {
@@ -464,6 +710,15 @@ func (engine *Engine) RunFd(fd int) (err error) {
 func (engine *Engine) RunListener(listener net.Listener) (err error) {
 	debugPrint("Listening and serving HTTP on listener what's bind with address@%s", listener.Addr())
 	defer func() { debugPrintError(err) }()
+<<<<<<< HEAD
+=======
+
+	err = engine.parseTrustedProxies()
+	if err != nil {
+		return err
+	}
+
+>>>>>>> master
 	err = http.Serve(listener, engine)
 	return
 }
@@ -523,7 +778,11 @@ func (engine *Engine) handleHTTPRequest(c *Context) {
 			c.writermem.WriteHeaderNow()
 			return
 		}
+<<<<<<< HEAD
 		if httpMethod != "CONNECT" && rPath != "/" {
+=======
+		if httpMethod != http.MethodConnect && rPath != "/" {
+>>>>>>> master
 			if value.tsr && engine.RedirectTrailingSlash {
 				redirectTrailingSlash(c)
 				return

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
 * SYSADM Server
 * @Author  Wayne Wang <net_use@bzhy.com>
@@ -17,6 +18,13 @@
 * @Modified Apr 20 2021
 **/
 
+=======
+// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
+//go:build !nomsgpack
+>>>>>>> master
 // +build !nomsgpack
 
 package render
@@ -53,6 +61,10 @@ func TestRenderMsgPack(t *testing.T) {
 	err = codec.NewEncoder(buf, h).Encode(data)
 
 	assert.NoError(t, err)
+<<<<<<< HEAD
 	assert.Equal(t, w.Body.String(), string(buf.Bytes()))
+=======
+	assert.Equal(t, w.Body.String(), buf.String())
+>>>>>>> master
 	assert.Equal(t, "application/msgpack; charset=utf-8", w.Header().Get("Content-Type"))
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
   * SYSADM Server
   * @Author  Wayne Wang <net_use@bzhy.com>                                                                                                                                                                                                ↷
@@ -17,6 +18,8 @@
   * @Modified Jul 09 2021
 */
 
+=======
+>>>>>>> master
 package binding
 
 import (
@@ -48,6 +51,10 @@ type headerSource map[string][]string
 
 var _ setter = headerSource(nil)
 
+<<<<<<< HEAD
 func (hs headerSource) TrySet(value reflect.Value, field reflect.StructField, tagValue string, opt setOptions) (isSetted bool, err error) {
+=======
+func (hs headerSource) TrySet(value reflect.Value, field reflect.StructField, tagValue string, opt setOptions) (bool, error) {
+>>>>>>> master
 	return setByForm(value, field, hs, textproto.CanonicalMIMEHeaderKey(tagValue), opt)
 }

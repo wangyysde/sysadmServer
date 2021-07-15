@@ -1,5 +1,6 @@
 module github.com/wangyysde/sysadmServer
 
+<<<<<<< HEAD
 go 1.14
 
 require (
@@ -11,3 +12,6 @@ require (
 	github.com/ugorji/go/codec v1.1.7
 	gopkg.in/yaml.v2 v2.2.8
 )
+=======
+go 1.16
+>>>>>>> master

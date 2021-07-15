@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
     * SYSADM Server
     * @Author  Wayne Wang <net_use@bzhy.com>
@@ -16,6 +17,11 @@
     * @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
     * @Modified Jul 05 2021
 **/
+=======
+// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+>>>>>>> master
 
 package sysadmServer
 
@@ -75,9 +81,13 @@ func (w *responseWriter) reset(writer http.ResponseWriter) {
 func (w *responseWriter) WriteHeader(code int) {
 	if code > 0 && w.status != code {
 		if w.Written() {
+<<<<<<< HEAD
 			if LoggerWriter != nil {
 				LoggerWriter.ErrorWriter("warn",fmt.Printf("Headers were already written. Wanted to override status code %d with %d", w.status, code))
 			}
+=======
+			debugPrint("[WARNING] Headers were already written. Wanted to override status code %d with %d", w.status, code)
+>>>>>>> master
 		}
 		w.status = code
 	}

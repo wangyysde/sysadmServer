@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
   * SYSADM Server
   * @Author  Wayne Wang <net_use@bzhy.com>                                                                                                                                                                                                ↷
@@ -16,6 +17,11 @@
   * @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
   * @Modified Jul 09 2021
 */
+=======
+// Copyright 2019 Gin Core Team. All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+>>>>>>> master
 
 package binding
 
@@ -160,6 +166,18 @@ func TestMappingForm(t *testing.T) {
 	assert.Equal(t, int(6), s.F)
 }
 
+<<<<<<< HEAD
+=======
+func TestMapFormWithTag(t *testing.T) {
+	var s struct {
+		F int `externalTag:"field"`
+	}
+	err := MapFormWithTag(&s, map[string][]string{"field": {"6"}}, "externalTag")
+	assert.NoError(t, err)
+	assert.Equal(t, int(6), s.F)
+}
+
+>>>>>>> master
 func TestMappingTime(t *testing.T) {
 	var s struct {
 		Time      time.Time
