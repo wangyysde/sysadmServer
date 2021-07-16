@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /**                                                                                                                                                                                                                                        
     * SYSADM Server
     * @Author  Wayne Wang <net_use@bzhy.com>
@@ -22,6 +23,23 @@
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 >>>>>>> master
+=======
+// sysadmServer
+// @Author  Wayne Wang <net_use@bzhy.com>
+// @Copyright Bzhy Network
+// @HomePage http://www.sysadm.cn
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+// @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
+//  @Modified on Jul 16 2021
+>>>>>>> replace-package-name-20210715
 
 package sysadmServer
 
@@ -36,14 +54,14 @@ import (
 )
 
 // BindKey indicates a default bind key.
-const BindKey = "_gin-gonic/gin/bindkey"
+const BindKey = "_wangyysde/sysadmServer/bindkey"
 
-// Bind is a helper function for given interface object and returns a Gin middleware.
+// Bind is a helper function for given interface object and returns a sysadmServer middleware.
 func Bind(val interface{}) HandlerFunc {
 	value := reflect.ValueOf(val)
 	if value.Kind() == reflect.Ptr {
 		panic(`Bind struct can not be a pointer. Example:
-	Use: gin.Bind(Struct{}) instead of gin.Bind(&Struct{})
+	Use: sysadmServer.Bind(Struct{}) instead of sysadmServer.Bind(&Struct{})
 `)
 	}
 	typ := value.Type()
@@ -56,14 +74,14 @@ func Bind(val interface{}) HandlerFunc {
 	}
 }
 
-// WrapF is a helper function for wrapping http.HandlerFunc and returns a Gin middleware.
+// WrapF is a helper function for wrapping http.HandlerFunc and returns a sysadmServer middleware.
 func WrapF(f http.HandlerFunc) HandlerFunc {
 	return func(c *Context) {
 		f(c.Writer, c.Request)
 	}
 }
 
-// WrapH is a helper function for wrapping http.Handler and returns a Gin middleware.
+// WrapH is a helper function for wrapping http.Handler and returns a sysadmServer middleware.
 func WrapH(h http.Handler) HandlerFunc {
 	return func(c *Context) {
 		h.ServeHTTP(c.Writer, c.Request)

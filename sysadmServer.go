@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /**
 	* SYSADM Server
 	* @Author  Wayne Wang <net_use@bzhy.com>
@@ -22,6 +23,24 @@
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 >>>>>>> master
+=======
+// sysadmServer
+// @Author  Wayne Wang <net_use@bzhy.com>
+// @Copyright Bzhy Network
+// @HomePage http://www.sysadm.cn
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+// @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
+// @Modified on Jul 16 2021
+
+>>>>>>> replace-package-name-20210715
 
 package sysadmServer
 
@@ -63,7 +82,7 @@ var defaultAppEngine bool
 
 var defaultPlatform string
 
-// HandlerFunc defines the handler used by gin middleware as return value.
+// HandlerFunc defines the handler used by sysadmServer middleware as return value.
 type HandlerFunc func(*Context)
 >>>>>>> master
 
@@ -155,6 +174,7 @@ type Engine struct {
 
 	// If enabled, client IP will be parsed from the request's headers that
 <<<<<<< HEAD
+<<<<<<< HEAD
 	// match those stored at `(*sysadmServer.Engine).RemoteIPHeaders`. If no IP was
 	// fetched, it falls back to the IP obtained from
 	// `(*sysadmServer.Context).Request.RemoteAddr`.
@@ -174,12 +194,19 @@ type Engine struct {
 
 =======
 	// match those stored at `(*gin.Engine).RemoteIPHeaders`. If no IP was
+=======
+	// match those stored at `(*sysadmServer.Engine).RemoteIPHeaders`. If no IP was
+>>>>>>> replace-package-name-20210715
 	// fetched, it falls back to the IP obtained from
-	// `(*gin.Context).Request.RemoteAddr`.
+	// `(*sysadmServer.Context).Request.RemoteAddr`.
 	ForwardedByClientIP bool
 
+<<<<<<< HEAD
 	// DEPRECATED: USE `TrustedPlatform` WITH VALUE `gin.GoogleAppEngine` INSTEAD
 >>>>>>> master
+=======
+	// DEPRECATED: USE `TrustedPlatform` WITH VALUE `sysadmServer.GoogleAppEngine` INSTEAD
+>>>>>>> replace-package-name-20210715
 	// #726 #755 If enabled, it will trust some headers starting with
 	// 'X-AppEngine...' for better integration with that PaaS.
 	AppEngine bool
@@ -206,18 +233,18 @@ type Engine struct {
 <<<<<<< HEAD
 =======
 	// List of headers used to obtain the client IP when
-	// `(*gin.Engine).ForwardedByClientIP` is `true` and
-	// `(*gin.Context).Request.RemoteAddr` is matched by at least one of the
-	// network origins of `(*gin.Engine).TrustedProxies`.
+	// `(*sysadmServer.Engine).ForwardedByClientIP` is `true` and
+	// `(*sysadmServer.Context).Request.RemoteAddr` is matched by at least one of the
+	// network origins of `(*sysadmServer.Engine).TrustedProxies`.
 	RemoteIPHeaders []string
 
 	// List of network origins (IPv4 addresses, IPv4 CIDRs, IPv6 addresses or
 	// IPv6 CIDRs) from which to trust request's headers that contain
-	// alternative client IP when `(*gin.Engine).ForwardedByClientIP` is
+	// alternative client IP when `(*sysadmServer.Engine).ForwardedByClientIP` is
 	// `true`.
 	TrustedProxies []string
 
-	// If set to a constant of value gin.Platform*, trusts the headers set by
+	// If set to a constant of value sysadmServer.Platform*, trusts the headers set by
 	// that platform, for example to determine the client IP
 	TrustedPlatform string
 

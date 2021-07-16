@@ -39,10 +39,14 @@ import (
 	"github.com/stretchr/testify/assert"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	testdata "github.com/wangyysde/sysadmServer/testdata/protoexample"
 =======
 	testdata "github.com/gin-gonic/gin/testdata/protoexample"
 >>>>>>> master
+=======
+	testdata "github.com/wangyysde/sysadmServer/testdata/protoexample"
+>>>>>>> replace-package-name-20210715
 )
 
 // TODO unit tests

@@ -14,22 +14,3 @@
 // @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
 //  @Modified on Jul 16 2021
 
-//go:build go_json
-// +build go_json
-
-package json
-
-import json "github.com/goccy/go-json"
-
-var (
-	// Marshal is exported by sysadmServer/json package.
-	Marshal = json.Marshal
-	// Unmarshal is exported by sysadmServer/json package.
-	Unmarshal = json.Unmarshal
-	// MarshalIndent is exported by sysadmServer/json package.
-	MarshalIndent = json.MarshalIndent
-	// NewDecoder is exported by sysadmServer/json package.
-	NewDecoder = json.NewDecoder
-	// NewEncoder is exported by sysadmServer/json package.
-	NewEncoder = json.NewEncoder
-)

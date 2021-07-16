@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 // +build nomsgpack
 
@@ -7,6 +8,23 @@
 // Copyright 2020 Gin Core Team. All rights reserved.
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
+=======
+// sysadmServer
+// @Author  Wayne Wang <net_use@bzhy.com>
+// @Copyright Bzhy Network
+// @HomePage http://www.sysadm.cn
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+// @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
+//  @Modified on Jul 15 2021
+>>>>>>> replace-package-name-20210715
 
 //go:build nomsgpack
 // +build nomsgpack
@@ -54,10 +72,14 @@ type BindingUri interface {
 // StructValidator is the minimal interface which needs to be implemented in
 // order for it to be used as the validator engine for ensuring the correctness
 <<<<<<< HEAD
+<<<<<<< HEAD
 // of the request. sysadmServer provides a default implementation for this using
 // https://github.com/go-playground/validator/tree/v8.18.2.
 =======
 // of the request. Gin provides a default implementation for this using
+=======
+// of the request. sysadmServer provides a default implementation for this using
+>>>>>>> replace-package-name-20210715
 // https://github.com/go-playground/validator/tree/v10.6.1.
 >>>>>>> master
 type StructValidator interface {

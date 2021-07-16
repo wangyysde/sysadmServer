@@ -1,11 +1,16 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 // sysadmServer 
+=======
+// sysadmServer
+>>>>>>> replace-package-name-20210715
 // @Author  Wayne Wang <net_use@bzhy.com>
 // @Copyright Bzhy Network
 // @HomePage http://www.sysadm.cn
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+<<<<<<< HEAD
 //  http://www.apache.org/licenses/LICENSE-2.0
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,6 +23,16 @@
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 >>>>>>> master
+=======
+// http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+// @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
+//  @Modified on Jul 15 2021
+>>>>>>> replace-package-name-20210715
 
 package sysadmServer
 
@@ -55,12 +70,12 @@ const (
 )
 
 // BodyBytesKey indicates a default body bytes key.
-const BodyBytesKey = "_gin-gonic/gin/bodybyteskey"
+const BodyBytesKey = "_wangyysde/sysadmServer/bodybyteskey"
 
 // abortIndex represents a typical value used in abort functions.
 const abortIndex int8 = math.MaxInt8 >> 1
 
-// Context is the most important part of gin. It allows us to pass variables between middleware,
+// Context is the most important part of sysadmServer. It allows us to pass variables between middleware,
 // manage the flow, validate the JSON of a request and render a JSON response for example.
 type Context struct {
 	writermem responseWriter
@@ -164,7 +179,7 @@ func (c *Context) Handler() HandlerFunc {
 
 // FullPath returns a matched route full path. For not found routes
 // returns an empty string.
-//     router.GET("/user/:id", func(c *gin.Context) {
+//     router.GET("/user/:id", func(c *sysadmServer.Context) {
 //         c.FullPath() == "/user/:id" // true
 //     })
 func (c *Context) FullPath() string {
@@ -392,7 +407,7 @@ func (c *Context) GetStringMapStringSlice(key string) (smss map[string][]string)
 
 // Param returns the value of the URL param.
 // It is a shortcut for c.Params.ByName(key)
-//     router.GET("/user/:id", func(c *gin.Context) {
+//     router.GET("/user/:id", func(c *sysadmServer.Context) {
 //         // a GET request to /user/john
 //         id := c.Param("id") // id == "john"
 //     })
@@ -764,7 +779,7 @@ func (c *Context) ClientIP() string {
 
 	// Legacy "AppEngine" flag
 	if c.engine.AppEngine {
-		log.Println(`The AppEngine flag is going to be deprecated. Please check issues #2723 and #2739 and use 'TrustedPlatform: gin.PlatformGoogleAppEngine' instead.`)
+		log.Println(`The AppEngine flag is going to be deprecated.`)
 		if addr := c.requestHeader("X-Appengine-Remote-Addr"); addr != "" {
 			return addr
 		}

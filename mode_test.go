@@ -13,28 +13,28 @@ import (
 )
 
 func init() {
-	os.Setenv(EnvGinMode, TestMode)
+	os.Setenv(EnvsysadmServerMode, TestMode)
 }
 
 func TestSetMode(t *testing.T) {
-	assert.Equal(t, testCode, ginMode)
+	assert.Equal(t, testCode, sysadmServerMode)
 	assert.Equal(t, TestMode, Mode())
-	os.Unsetenv(EnvGinMode)
+	os.Unsetenv(EnvsysadmServerMode)
 
 	SetMode("")
-	assert.Equal(t, debugCode, ginMode)
+	assert.Equal(t, debugCode, sysadmServerMode)
 	assert.Equal(t, DebugMode, Mode())
 
 	SetMode(DebugMode)
-	assert.Equal(t, debugCode, ginMode)
+	assert.Equal(t, debugCode, sysadmServerMode)
 	assert.Equal(t, DebugMode, Mode())
 
 	SetMode(ReleaseMode)
-	assert.Equal(t, releaseCode, ginMode)
+	assert.Equal(t, releaseCode, sysadmServerMode)
 	assert.Equal(t, ReleaseMode, Mode())
 
 	SetMode(TestMode)
-	assert.Equal(t, testCode, ginMode)
+	assert.Equal(t, testCode, sysadmServerMode)
 	assert.Equal(t, TestMode, Mode())
 
 	assert.Panics(t, func() { SetMode("unknown") })

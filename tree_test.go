@@ -1,6 +1,18 @@
-// Copyright 2013 Julien Schmidt. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be found
-// at https://github.com/julienschmidt/httprouter/blob/master/LICENSE
+// sysadmServer
+// @Author  Wayne Wang <net_use@bzhy.com>
+// @Copyright Bzhy Network
+// @HomePage http://www.sysadm.cn
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+// @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
+//  @Modified on Jul 16 2021
 
 package sysadmServer
 
@@ -143,7 +155,7 @@ func TestTreeWildcard(t *testing.T) {
 		"/src/*filepath",
 		"/search/",
 		"/search/:query",
-		"/search/gin-gonic",
+		"/search/wangyysde",
 		"/search/google",
 		"/user_:name",
 		"/user_:name/about",
@@ -177,8 +189,8 @@ func TestTreeWildcard(t *testing.T) {
 		{"/search/", false, "/search/", nil},
 		{"/search/someth!ng+in+ünìcodé", false, "/search/:query", Params{Param{Key: "query", Value: "someth!ng+in+ünìcodé"}}},
 		{"/search/someth!ng+in+ünìcodé/", true, "", Params{Param{Key: "query", Value: "someth!ng+in+ünìcodé"}}},
-		{"/search/gin", false, "/search/:query", Params{Param{"query", "gin"}}},
-		{"/search/gin-gonic", false, "/search/gin-gonic", nil},
+		{"/search/sysadmServer", false, "/search/:query", Params{Param{"query", "sysadmServer"}}},
+		{"/search/wangyysde", false, "/search/wangyysde", nil},
 		{"/search/google", false, "/search/google", nil},
 		{"/user_gopher", false, "/user_:name", Params{Param{Key: "name", Value: "gopher"}}},
 		{"/user_gopher/about", false, "/user_:name/about", Params{Param{Key: "name", Value: "gopher"}}},

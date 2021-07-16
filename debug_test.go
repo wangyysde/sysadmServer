@@ -1,6 +1,18 @@
-// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
+// sysadmServer
+// @Author  Wayne Wang <net_use@bzhy.com>
+// @Copyright Bzhy Network
+// @HomePage http://www.sysadm.cn
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+// @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
+//  @Modified on Jul 15 2021
 
 package sysadmServer
 
@@ -43,7 +55,7 @@ func TestDebugPrint(t *testing.T) {
 		debugPrint("these are %d %s", 2, "error messages")
 		SetMode(TestMode)
 	})
-	assert.Equal(t, "[GIN-debug] these are 2 error messages\n", re)
+	assert.Equal(t, "these are 2 error messages\n", re)
 }
 
 func TestDebugPrintError(t *testing.T) {
@@ -53,7 +65,7 @@ func TestDebugPrintError(t *testing.T) {
 		debugPrintError(errors.New("this is an error"))
 		SetMode(TestMode)
 	})
-	assert.Equal(t, "[GIN-debug] [ERROR] this is an error\n", re)
+	assert.Equal(t, "[ERROR] this is an error\n", re)
 }
 
 func TestDebugPrintRoutes(t *testing.T) {
@@ -62,19 +74,19 @@ func TestDebugPrintRoutes(t *testing.T) {
 		debugPrintRoute("GET", "/path/to/route/:param", HandlersChain{func(c *Context) {}, handlerNameTest})
 		SetMode(TestMode)
 	})
-	assert.Regexp(t, `^\[GIN-debug\] GET    /path/to/route/:param     --> (.*/vendor/)?github.com/gin-gonic/gin.handlerNameTest \(2 handlers\)\n$`, re)
+	assert.Regexp(t, `^GET    /path/to/route/:param     --> (.*/vendor/)?github.com/wangyysde/sysadmServer.handlerNameTest \(2 handlers\)\n$`, re)
 }
 
 func TestDebugPrintRouteFunc(t *testing.T) {
 	DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
-		fmt.Fprintf(DefaultWriter, "[GIN-debug] %-6s %-40s --> %s (%d handlers)\n", httpMethod, absolutePath, handlerName, nuHandlers)
+		fmt.Fprintf(DefaultWriter, "%-6s %-40s --> %s (%d handlers)\n", httpMethod, absolutePath, handlerName, nuHandlers)
 	}
 	re := captureOutput(t, func() {
 		SetMode(DebugMode)
 		debugPrintRoute("GET", "/path/to/route/:param1/:param2", HandlersChain{func(c *Context) {}, handlerNameTest})
 		SetMode(TestMode)
 	})
-	assert.Regexp(t, `^\[GIN-debug\] GET    /path/to/route/:param1/:param2           --> (.*/vendor/)?github.com/gin-gonic/gin.handlerNameTest \(2 handlers\)\n$`, re)
+	assert.Regexp(t, `^GET    /path/to/route/:param1/:param2           --> (.*/vendor/)?github.com/wangyysde/sysadmServer.handlerNameTest \(2 handlers\)\n$`, re)
 }
 
 func TestDebugPrintLoadTemplate(t *testing.T) {
@@ -84,7 +96,7 @@ func TestDebugPrintLoadTemplate(t *testing.T) {
 		debugPrintLoadTemplate(templ)
 		SetMode(TestMode)
 	})
-	assert.Regexp(t, `^\[GIN-debug\] Loaded HTML Templates \(2\): \n(\t- \n|\t- hello\.tmpl\n){2}\n`, re)
+	assert.Regexp(t, `^Loaded HTML Templates \(2\): \n(\t- \n|\t- hello\.tmpl\n){2}\n`, re)
 }
 
 func TestDebugPrintWARNINGSetHTMLTemplate(t *testing.T) {
@@ -93,7 +105,7 @@ func TestDebugPrintWARNINGSetHTMLTemplate(t *testing.T) {
 		debugPrintWARNINGSetHTMLTemplate()
 		SetMode(TestMode)
 	})
-	assert.Equal(t, "[GIN-debug] [WARNING] Since SetHTMLTemplate() is NOT thread-safe. It should only be called\nat initialization. ie. before any route is registered or the router is listening in a socket:\n\n\trouter := gin.Default()\n\trouter.SetHTMLTemplate(template) // << good place\n\n", re)
+	assert.Equal(t, "[WARNING] Since SetHTMLTemplate() is NOT thread-safe. It should only be called\nat initialization. ie. before any route is registered or the router is listening in a socket:\n\n\trouter := sysadmServer.Default()\n\trouter.SetHTMLTemplate(template) // << good place\n\n", re)
 }
 
 func TestDebugPrintWARNINGDefault(t *testing.T) {
@@ -103,10 +115,10 @@ func TestDebugPrintWARNINGDefault(t *testing.T) {
 		SetMode(TestMode)
 	})
 	m, e := getMinVer(runtime.Version())
-	if e == nil && m <= ginSupportMinGoVer {
-		assert.Equal(t, "[GIN-debug] [WARNING] Now Gin requires Go 1.13+.\n\n[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.\n\n", re)
+	if e == nil && m <= sysadmServerSupportMinGoVer {
+		assert.Equal(t, "[WARNING] Now sysadmServer requires Go 1.13+.\n\n [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.\n\n", re)
 	} else {
-		assert.Equal(t, "[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.\n\n", re)
+		assert.Equal(t, "[WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.\n\n", re)
 	}
 }
 
@@ -116,7 +128,7 @@ func TestDebugPrintWARNINGNew(t *testing.T) {
 		debugPrintWARNINGNew()
 		SetMode(TestMode)
 	})
-	assert.Equal(t, "[GIN-debug] [WARNING] Running in \"debug\" mode. Switch to \"release\" mode in production.\n - using env:\texport GIN_MODE=release\n - using code:\tgin.SetMode(gin.ReleaseMode)\n\n", re)
+	assert.Equal(t, "[WARNING] Running in \"debug\" mode. Switch to \"release\" mode in production.\n - using env:\texport GIN_MODE=release\n - using code:\tsysadmServer.SetMode(sysadmServer.ReleaseMode)\n\n", re)
 }
 
 func captureOutput(t *testing.T, f func()) string {

@@ -1,6 +1,18 @@
-// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
+// sysadmServer
+// @Author  Wayne Wang <net_use@bzhy.com>
+// @Copyright Bzhy Network
+// @HomePage http://www.sysadm.cn
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+// @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
+//  @Modified on Jul 16 2021
 
 package sysadmServer
 
@@ -37,11 +49,11 @@ var consoleColorMode = autoColor
 
 // LoggerConfig defines the config for Logger middleware.
 type LoggerConfig struct {
-	// Optional. Default value is gin.defaultLogFormatter
+	// Optional. Default value is sysadmServer.defaultLogFormatter
 	Formatter LogFormatter
 
 	// Output is a writer where logs are written.
-	// Optional. Default value is gin.DefaultWriter.
+	// Optional. Default value is sysadmServer.DefaultWriter.
 	Output io.Writer
 
 	// SkipPaths is a url path array which logs are not written.
@@ -70,7 +82,7 @@ type LogFormatterParams struct {
 	Path string
 	// ErrorMessage is set if error has occurred in processing the request.
 	ErrorMessage string
-	// isTerm shows whether does gin's output descriptor refers to a terminal.
+	// isTerm shows whether does sysadmServer's output descriptor refers to a terminal.
 	isTerm bool
 	// BodySize is the size of the Response Body
 	BodySize int
@@ -140,7 +152,7 @@ var defaultLogFormatter = func(param LogFormatterParams) string {
 	if param.Latency > time.Minute {
 		param.Latency = param.Latency.Truncate(time.Second)
 	}
-	return fmt.Sprintf("[GIN] %v |%s %3d %s| %13v | %15s |%s %-7s %s %#v\n%s",
+	return fmt.Sprintf("%v |%s %3d %s| %13v | %15s |%s %-7s %s %#v\n%s",
 		param.TimeStamp.Format("2006/01/02 - 15:04:05"),
 		statusColor, param.StatusCode, resetColor,
 		param.Latency,
@@ -177,8 +189,8 @@ func ErrorLoggerT(typ ErrorType) HandlerFunc {
 	}
 }
 
-// Logger instances a Logger middleware that will write the logs to gin.DefaultWriter.
-// By default gin.DefaultWriter = os.Stdout.
+// Logger instances a Logger middleware that will write the logs to sysadmServer.DefaultWriter.
+// By default sysadmServer.DefaultWriter = os.Stdout.
 func Logger() HandlerFunc {
 	return LoggerWithConfig(LoggerConfig{})
 }

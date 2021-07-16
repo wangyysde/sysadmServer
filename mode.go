@@ -1,6 +1,18 @@
-// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
+// sysadmServer
+// @Author  Wayne Wang <net_use@bzhy.com>
+// @Copyright Bzhy Network
+// @HomePage http://www.sysadm.cn
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+// @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
+//  @Modified on Jul 16 2021
 
 package sysadmServer
 
@@ -11,15 +23,15 @@ import (
 	"github.com/wangyysde/sysadmServer/binding"
 )
 
-// EnvGinMode indicates environment name for gin mode.
-const EnvGinMode = "GIN_MODE"
+// EnvsysadmServerMode indicates environment name for sysadmServer mode.
+const EnvsysadmServerMode = "sysadmServer_MODE"
 
 const (
-	// DebugMode indicates gin mode is debug.
+	// DebugMode indicates sysadmServer mode is debug.
 	DebugMode = "debug"
-	// ReleaseMode indicates gin mode is release.
+	// ReleaseMode indicates sysadmServer mode is release.
 	ReleaseMode = "release"
-	// TestMode indicates gin mode is test.
+	// TestMode indicates sysadmServer mode is test.
 	TestMode = "test"
 )
 
@@ -29,27 +41,27 @@ const (
 	testCode
 )
 
-// DefaultWriter is the default io.Writer used by Gin for debug output and
+// DefaultWriter is the default io.Writer used by sysadmServer for debug output and
 // middleware output like Logger() or Recovery().
 // Note that both Logger and Recovery provides custom ways to configure their
 // output io.Writer.
 // To support coloring in Windows use:
 // 		import "github.com/mattn/go-colorable"
-// 		gin.DefaultWriter = colorable.NewColorableStdout()
+// 		sysadmServer.DefaultWriter = colorable.NewColorableStdout()
 var DefaultWriter io.Writer = os.Stdout
 
-// DefaultErrorWriter is the default io.Writer used by Gin to debug errors
+// DefaultErrorWriter is the default io.Writer used by sysadmServer to debug errors
 var DefaultErrorWriter io.Writer = os.Stderr
 
-var ginMode = debugCode
+var sysadmServerMode = debugCode
 var modeName = DebugMode
 
 func init() {
-	mode := os.Getenv(EnvGinMode)
+	mode := os.Getenv(EnvsysadmServerMode)
 	SetMode(mode)
 }
 
-// SetMode sets gin mode according to input string.
+// SetMode sets sysadmServer mode according to input string.
 func SetMode(value string) {
 	if value == "" {
 		value = DebugMode
@@ -57,13 +69,13 @@ func SetMode(value string) {
 
 	switch value {
 	case DebugMode:
-		ginMode = debugCode
+		sysadmServerMode = debugCode
 	case ReleaseMode:
-		ginMode = releaseCode
+		sysadmServerMode = releaseCode
 	case TestMode:
-		ginMode = testCode
+		sysadmServerMode = testCode
 	default:
-		panic("gin mode unknown: " + value + " (available mode: debug release test)")
+		panic("sysadmServer mode unknown: " + value + " (available mode: debug release test)")
 	}
 
 	modeName = value
@@ -86,7 +98,7 @@ func EnableJsonDecoderDisallowUnknownFields() {
 	binding.EnableDecoderDisallowUnknownFields = true
 }
 
-// Mode returns currently gin mode.
+// Mode returns currently sysadmServer mode.
 func Mode() string {
 	return modeName
 }
