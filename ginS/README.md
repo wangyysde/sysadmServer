@@ -1,17 +1,17 @@
-# Gin Default Server
+# sysadmServer Default Server
 
-This is API experiment for Gin.
+This is API experiment for sysadmServer.
 
 ```go
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/ginS"
+	"github.com/wangyysde/sysadmServer"
+	"github.com/wangyysde/sysadmServer/ginS"
 )
 
 func main() {
-	ginS.GET("/", func(c *gin.Context) { c.String(200, "Hello World") })
+	ginS.GET("/", func(c *sysadmserver.Context) { c.String(200, "Hello World") })
 	ginS.Run()
 }
 ```

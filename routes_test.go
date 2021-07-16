@@ -1,6 +1,18 @@
-// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
+// sysadmServer
+// @Author  Wayne Wang <net_use@bzhy.com>
+// @Copyright Bzhy Network
+// @HomePage http://www.sysadm.cn
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+// @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
+// @Modified on Jul 16 2021
 
 package sysadmServer
 
@@ -298,13 +310,13 @@ func TestRouteStaticFile(t *testing.T) {
 		t.Error(err)
 	}
 	defer os.Remove(f.Name())
-	_, err = f.WriteString("Gin Web Framework")
+	_, err = f.WriteString("sysadmServer Web Framework")
 	assert.NoError(t, err)
 	f.Close()
 
 	dir, filename := filepath.Split(f.Name())
 
-	// SETUP gin
+	// SETUP sysadmServer
 	router := New()
 	router.Static("/using_static", dir)
 	router.StaticFile("/result", f.Name())
@@ -314,7 +326,7 @@ func TestRouteStaticFile(t *testing.T) {
 
 	assert.Equal(t, w, w2)
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, "Gin Web Framework", w.Body.String())
+	assert.Equal(t, "sysadmServer Web Framework", w.Body.String())
 	assert.Equal(t, "text/plain; charset=utf-8", w.Header().Get("Content-Type"))
 
 	w3 := performRequest(router, http.MethodHead, "/using_static/"+filename)
@@ -332,7 +344,7 @@ func TestRouteStaticListingDir(t *testing.T) {
 	w := performRequest(router, http.MethodGet, "/")
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Contains(t, w.Body.String(), "gin.go")
+	assert.Contains(t, w.Body.String(), "sysadmServer.go")
 	assert.Equal(t, "text/html; charset=utf-8", w.Header().Get("Content-Type"))
 }
 
@@ -344,7 +356,7 @@ func TestRouteStaticNoListing(t *testing.T) {
 	w := performRequest(router, http.MethodGet, "/")
 
 	assert.Equal(t, http.StatusNotFound, w.Code)
-	assert.NotContains(t, w.Body.String(), "gin.go")
+	assert.NotContains(t, w.Body.String(), "sysadmServer.go")
 }
 
 func TestRouterMiddlewareAndStatic(t *testing.T) {
@@ -352,20 +364,20 @@ func TestRouterMiddlewareAndStatic(t *testing.T) {
 	static := router.Group("/", func(c *Context) {
 		c.Writer.Header().Add("Last-Modified", "Mon, 02 Jan 2006 15:04:05 MST")
 		c.Writer.Header().Add("Expires", "Mon, 02 Jan 2006 15:04:05 MST")
-		c.Writer.Header().Add("X-GIN", "Gin Framework")
+		c.Writer.Header().Add("X-sysadmServer", "sysadmServer Framework")
 	})
 	static.Static("/", "./")
 
-	w := performRequest(router, http.MethodGet, "/gin.go")
+	w := performRequest(router, http.MethodGet, "/sysadmServer.go")
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Contains(t, w.Body.String(), "package gin")
+	assert.Contains(t, w.Body.String(), "package sysadmServer")
 	// Content-Type='text/plain; charset=utf-8' when go version <= 1.16,
 	// else, Content-Type='text/x-go; charset=utf-8'
 	assert.NotEqual(t, "", w.Header().Get("Content-Type"))
 	assert.NotEqual(t, w.Header().Get("Last-Modified"), "Mon, 02 Jan 2006 15:04:05 MST")
 	assert.Equal(t, "Mon, 02 Jan 2006 15:04:05 MST", w.Header().Get("Expires"))
-	assert.Equal(t, "Gin Framework", w.Header().Get("x-GIN"))
+	assert.Equal(t, "sysadmServer Framework", w.Header().Get("x-sysadmServer"))
 }
 
 func TestRouteNotAllowedEnabled(t *testing.T) {

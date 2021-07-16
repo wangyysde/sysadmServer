@@ -1,6 +1,18 @@
-// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
+// sysadmServer
+// @Author  Wayne Wang <net_use@bzhy.com>
+// @Copyright Bzhy Network
+// @HomePage http://www.sysadm.cn
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+// @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
+//  @Modified on Jul 15 2021
 
 package sysadmServer
 
@@ -353,7 +365,7 @@ func TestContextHandlerName(t *testing.T) {
 	c, _ := CreateTestContext(httptest.NewRecorder())
 	c.handlers = HandlersChain{func(c *Context) {}, handlerNameTest}
 
-	assert.Regexp(t, "^(.*/vendor/)?github.com/gin-gonic/gin.handlerNameTest$", c.HandlerName())
+	assert.Regexp(t, "^(.*/vendor/)?github.com/wangyysde/sysadmServer.handlerNameTest$", c.HandlerName())
 }
 
 func TestContextHandlerNames(t *testing.T) {
@@ -364,7 +376,7 @@ func TestContextHandlerNames(t *testing.T) {
 
 	assert.True(t, len(names) == 4)
 	for _, name := range names {
-		assert.Regexp(t, `^(.*/vendor/)?(github\.com/gin-gonic/gin\.){1}(TestContextHandlerNames\.func.*){0,1}(handlerNameTest.*){0,1}`, name)
+		assert.Regexp(t, `^(.*/vendor/)?(github\.com/wangyysde/sysadmServer\.){1}(TestContextHandlerNames\.func.*){0,1}(handlerNameTest.*){0,1}`, name)
 	}
 }
 
@@ -630,23 +642,23 @@ func TestContextPostFormMultipart(t *testing.T) {
 func TestContextSetCookie(t *testing.T) {
 	c, _ := CreateTestContext(httptest.NewRecorder())
 	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("user", "gin", 1, "/", "localhost", true, true)
-	assert.Equal(t, "user=gin; Path=/; Domain=localhost; Max-Age=1; HttpOnly; Secure; SameSite=Lax", c.Writer.Header().Get("Set-Cookie"))
+	c.SetCookie("user", "sysadmServer", 1, "/", "localhost", true, true)
+	assert.Equal(t, "user=sysadmServer; Path=/; Domain=localhost; Max-Age=1; HttpOnly; Secure; SameSite=Lax", c.Writer.Header().Get("Set-Cookie"))
 }
 
 func TestContextSetCookiePathEmpty(t *testing.T) {
 	c, _ := CreateTestContext(httptest.NewRecorder())
 	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("user", "gin", 1, "", "localhost", true, true)
-	assert.Equal(t, "user=gin; Path=/; Domain=localhost; Max-Age=1; HttpOnly; Secure; SameSite=Lax", c.Writer.Header().Get("Set-Cookie"))
+	c.SetCookie("user", "sysadmServer", 1, "", "localhost", true, true)
+	assert.Equal(t, "user=sysadmServer; Path=/; Domain=localhost; Max-Age=1; HttpOnly; Secure; SameSite=Lax", c.Writer.Header().Get("Set-Cookie"))
 }
 
 func TestContextGetCookie(t *testing.T) {
 	c, _ := CreateTestContext(httptest.NewRecorder())
 	c.Request, _ = http.NewRequest("GET", "/get", nil)
-	c.Request.Header.Set("Cookie", "user=gin")
+	c.Request.Header.Set("Cookie", "user=sysadmServer")
 	cookie, _ := c.Cookie("user")
-	assert.Equal(t, "gin", cookie)
+	assert.Equal(t, "sysadmServer", cookie)
 
 	_, err := c.Cookie("nokey")
 	assert.Error(t, err)
@@ -867,7 +879,7 @@ func TestContextRenderHTML2(t *testing.T) {
 		SetMode(TestMode)
 	})
 
-	assert.Equal(t, "[GIN-debug] [WARNING] Since SetHTMLTemplate() is NOT thread-safe. It should only be called\nat initialization. ie. before any route is registered or the router is listening in a socket:\n\n\trouter := gin.Default()\n\trouter.SetHTMLTemplate(template) // << good place\n\n", re)
+	assert.Equal(t, "[WARNING] Since SetHTMLTemplate() is NOT thread-safe. It should only be called\nat initialization. ie. before any route is registered or the router is listening in a socket:\n\n\trouter := sysadmServer.Default()\n\trouter.SetHTMLTemplate(template) // << good place\n\n", re)
 
 	c.HTML(http.StatusCreated, "t", H{"name": "alexandernyquist"})
 
@@ -1014,7 +1026,7 @@ func TestContextRenderFile(t *testing.T) {
 	c, _ := CreateTestContext(w)
 
 	c.Request, _ = http.NewRequest("GET", "/", nil)
-	c.File("./gin.go")
+	c.File("./sysadmServer.go")
 
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Contains(t, w.Body.String(), "func New() *Engine {")
@@ -1028,7 +1040,7 @@ func TestContextRenderFileFromFS(t *testing.T) {
 	c, _ := CreateTestContext(w)
 
 	c.Request, _ = http.NewRequest("GET", "/some/path", nil)
-	c.FileFromFS("./gin.go", Dir(".", false))
+	c.FileFromFS("./sysadmServer.go", Dir(".", false))
 
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Contains(t, w.Body.String(), "func New() *Engine {")
@@ -1044,7 +1056,7 @@ func TestContextRenderAttachment(t *testing.T) {
 	newFilename := "new_filename.go"
 
 	c.Request, _ = http.NewRequest("GET", "/", nil)
-	c.FileAttachment("./gin.go", newFilename)
+	c.FileAttachment("./sysadmServer.go", newFilename)
 
 	assert.Equal(t, 200, w.Code)
 	assert.Contains(t, w.Body.String(), "func New() *Engine {")
@@ -1193,12 +1205,12 @@ func TestContextNegotiationWithHTML(t *testing.T) {
 
 	c.Negotiate(http.StatusOK, Negotiate{
 		Offered:  []string{MIMEHTML},
-		Data:     H{"name": "gin"},
+		Data:     H{"name": "sysadmServer"},
 		HTMLName: "t",
 	})
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, "Hello gin", w.Body.String())
+	assert.Equal(t, "Hello sysadmServer", w.Body.String())
 	assert.Equal(t, "text/html; charset=utf-8", w.Header().Get("Content-Type"))
 }
 
@@ -1893,9 +1905,9 @@ func TestWebsocketsRequired(t *testing.T) {
 func TestGetRequestHeaderValue(t *testing.T) {
 	c, _ := CreateTestContext(httptest.NewRecorder())
 	c.Request, _ = http.NewRequest("GET", "/chat", nil)
-	c.Request.Header.Set("Gin-Version", "1.0.0")
+	c.Request.Header.Set("sysadmServer-Version", "1.0.0")
 
-	assert.Equal(t, "1.0.0", c.GetHeader("Gin-Version"))
+	assert.Equal(t, "1.0.0", c.GetHeader("sysadmServer-Version"))
 	assert.Empty(t, c.GetHeader("Connection"))
 }
 
