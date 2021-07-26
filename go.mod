@@ -12,5 +12,6 @@ require (
 	github.com/stretchr/testify v1.4.0
 	github.com/thinkerou/favicon v0.1.0 // indirect
 	github.com/ugorji/go/codec v1.2.6
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
 	gopkg.in/yaml.v2 v2.4.0
 )

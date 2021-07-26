@@ -90,7 +90,7 @@ func debugPrintWARNINGDefault() {
 
 func debugPrintWARNINGNew() {
 	debugPrint(`[WARNING] Running in "debug" mode. Switch to "release" mode in production.
- - using env:	export GIN_MODE=release
+ - using env:	export SYSADMSERVER_MODE=release
  - using code:	sysadmServer.SetMode(sysadmServer.ReleaseMode)
 
 `)
