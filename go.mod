@@ -3,6 +3,7 @@ module github.com/wangyysde/sysadmServer
 go 1.16
 
 require (
+	github.com/dustin/go-broadcast v0.0.0-20171205050544-f664265f5a66 // indirect
 	github.com/fatih/color v1.12.0 // indirect
 	github.com/gin-gonic/gin v1.7.2 // indirect
 	github.com/go-playground/validator/v10 v10.7.0
@@ -10,6 +11,7 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/kisielk/gotool v1.0.0 // indirect
+	github.com/manucorporat/stats v0.0.0-20180402194714-3ba42d56d227 // indirect
 	github.com/mattn/go-isatty v0.0.13
 	github.com/stretchr/testify v1.6.1
 	github.com/thinkerou/favicon v0.1.0 // indirect
