@@ -9,6 +9,9 @@ require (
 	github.com/go-playground/validator/v10 v10.7.0
 	github.com/goccy/go-json v0.7.4 // indirect
 	github.com/golang/protobuf v1.5.2
+	github.com/jessevdk/go-assets v0.0.0-20160921144138-4f4301a06e15 // indirect
+	github.com/jessevdk/go-assets-builder v0.0.0-20130903091706-b8483521738f // indirect
+	github.com/jessevdk/go-flags v1.5.0 // indirect
 	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/kisielk/gotool v1.0.0 // indirect
 	github.com/manucorporat/stats v0.0.0-20180402194714-3ba42d56d227 // indirect
