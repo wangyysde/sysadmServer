@@ -1,0 +1,16 @@
+#!/bin/bash
+kubectl label crds localstoragealerts.uds.dce.daocloud.io app.kubernetes.io/managed-by=Helm --overwrite
+kubectl label crds localstoragenodes.uds.dce.daocloud.io app.kubernetes.io/managed-by=Helm --overwrite
+kubectl label crds localvolumeconverts.uds.dce.daocloud.io app.kubernetes.io/managed-by=Helm --overwrite
+kubectl label crds localvolumeexpansions.uds.dce.daocloud.io app.kubernetes.io/managed-by=Helm --overwrite
+kubectl label crds localvolumemigrates.uds.dce.daocloud.io app.kubernetes.io/managed-by=Helm --overwrite
+kubectl label crds localvolumereplicas.uds.dce.daocloud.io app.kubernetes.io/managed-by=Helm --overwrite
+kubectl label crds localvolumes.uds.dce.daocloud.io app.kubernetes.io/managed-by=Helm --overwrite
+
+kubectl annotate crds localstoragealerts.uds.dce.daocloud.io meta.helm.sh/release-name=dce-addons meta.helm.sh/release-namespace=kube-system --overwrite
+kubectl annotate crds localstoragenodes.uds.dce.daocloud.io meta.helm.sh/release-name=dce-addons meta.helm.sh/release-namespace=kube-system --overwrite
+kubectl annotate crds localvolumeconverts.uds.dce.daocloud.io meta.helm.sh/release-name=dce-addons meta.helm.sh/release-namespace=kube-system --overwrite
+kubectl annotate crds localvolumeexpansions.uds.dce.daocloud.io meta.helm.sh/release-name=dce-addons meta.helm.sh/release-namespace=kube-system --overwrite
+kubectl annotate crds localvolumemigrates.uds.dce.daocloud.io meta.helm.sh/release-name=dce-addons meta.helm.sh/release-namespace=kube-system --overwrite
+kubectl annotate crds localvolumereplicas.uds.dce.daocloud.io meta.helm.sh/release-name=dce-addons meta.helm.sh/release-namespace=kube-system --overwrite
+kubectl annotate crds localvolumes.uds.dce.daocloud.io meta.helm.sh/release-name=dce-addons meta.helm.sh/release-namespace=kube-system --overwrite
