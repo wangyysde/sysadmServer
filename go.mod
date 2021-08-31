@@ -16,6 +16,7 @@ require (
 	github.com/kisielk/gotool v1.0.0 // indirect
 	github.com/manucorporat/stats v0.0.0-20180402194714-3ba42d56d227 // indirect
 	github.com/mattn/go-isatty v0.0.13
+	github.com/newrelic/go-agent v3.14.1+incompatible // indirect
 	github.com/stretchr/testify v1.6.1
 	github.com/thinkerou/favicon v0.1.0 // indirect
 	github.com/ugorji/go/codec v1.2.6
@@ -23,5 +24,6 @@ require (
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
 	golang.org/x/net v0.0.0-20200822124328-c89045814202 // indirect
 	google.golang.org/grpc v1.40.0 // indirect
+	gopkg.in/go-playground/validator.v8 v8.18.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0
 )
