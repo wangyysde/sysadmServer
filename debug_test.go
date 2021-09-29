@@ -9,7 +9,7 @@
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and 
+// See the License for the specific language governing permissions and
 // limitations under the License.
 // @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
 //  @Modified on Jul 15 2021
@@ -128,7 +128,7 @@ func TestDebugPrintWARNINGNew(t *testing.T) {
 		debugPrintWARNINGNew()
 		SetMode(TestMode)
 	})
-	assert.Equal(t, "[WARNING] Running in \"debug\" mode. Switch to \"release\" mode in production.\n - using env:\texport GIN_MODE=release\n - using code:\tsysadmServer.SetMode(sysadmServer.ReleaseMode)\n\n", re)
+	assert.Equal(t, "[WARNING] Running in \"debug\" mode. Switch to \"release\" mode in production.\n - using env:\texport SYSADMSERVER_MODE=release\n - using code:\tsysadmServer.SetMode(sysadmServer.ReleaseMode)\n\n", re)
 }
 
 func captureOutput(t *testing.T, f func()) string {

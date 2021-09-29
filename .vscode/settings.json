@@ -1,0 +1,7 @@
+{
+    "github.gitAuthentication": true,
+    "go.alternateTools": {
+    
+    },
+    "vim.foldfix": true,
+}

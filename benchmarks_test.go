@@ -45,6 +45,7 @@ func BenchmarkLoggerMiddleware(B *testing.B) {
 
 func BenchmarkManyHandlers(B *testing.B) {
 	router := New()
+	LoggerConfigVar.DefaultLogger.Out = newMockWriter()
 	router.Use(Recovery(), LoggerWithWriter(newMockWriter()))
 	router.Use(func(c *Context) {})
 	router.Use(func(c *Context) {})

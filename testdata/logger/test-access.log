@@ -1,0 +1,18 @@
+time=2021-09-27T16:32:03+08:00 level=error msg=This is a test default error message Method=GET ErrorMessage=This is a test default error message Path=/
+time=2021-09-27T16:34:31+08:00 level=error msg=This is a test default error message ErrorMessage=This is a test default error message Path=/ Method=GET
+time=2021-09-27T16:42:49+08:00 level=error Path=/ Method=GET
+time=2021-09-27T16:48:51+08:00 level=error Path=/ Method=GET
+time=2021-09-27T16:52:53+08:00 level=error Path=/ Method=GET
+time=2021-09-27T16:53:54+08:00 level=error Path=/ Method=GET
+time=2021-09-27T17:17:55+08:00 level=error Method=GET ErrorMessage=This is a test default error message Path=/
+time=2021-09-27T17:21:26+08:00 level=error ErrorMessage=This is a test default error message Path=/ Method=GET
+time=2021-09-27T17:22:38+08:00 level=error Path=/ Method=GET ErrorMessage=This is a test default error message
+time=2021-09-27T17:31:12+08:00 level=error ErrorMessage=This is a test default error message Path=/ Method=GET
+{"ErrorMessage":"This is a error message","Method":"GET","Path":"/","file":"/data/code/golang/src/bzhyProjects/sysadmServer/logger.go:474","func":"github.com/wangyysde/sysadmServer.WriteLogWithFields","level":"info","msg":"","time":"2021-09-28 20:44:30"}
+{"ErrorMessage":"This is a error message","Method":"GET","Path":"/","file":"/data/code/golang/src/bzhyProjects/sysadmServer/logger.go:474","func":"github.com/wangyysde/sysadmServer.WriteLogWithFields","level":"info","msg":""}
+{"ErrorMessage":"This is a error message","Method":"GET","Path":"/","file":"e:/documents/documented_document/code/golang/bzhyProjects/sysadmServer/logger.go:474","func":"github.com/wangyysde/sysadmServer.WriteLogWithFields","level":"info","msg":"","time":"2021-09-28 22:05:47"}
+{"ErrorMessage":"This is a error message","Method":"GET","Path":"/","file":"e:/documents/documented_document/code/golang/bzhyProjects/sysadmServer/logger.go:474","func":"github.com/wangyysde/sysadmServer.WriteLogWithFields","level":"info","msg":""}
+{"ErrorMessage":"This is a error message","Method":"GET","Path":"/","file":"e:/documents/documented_document/code/golang/bzhyProjects/sysadmServer/logger.go:474","func":"github.com/wangyysde/sysadmServer.WriteLogWithFields","level":"info","msg":"","time":"2021-09-28 22:06:27"}
+{"ErrorMessage":"This is a error message","Method":"GET","Path":"/","file":"e:/documents/documented_document/code/golang/bzhyProjects/sysadmServer/logger.go:474","func":"github.com/wangyysde/sysadmServer.WriteLogWithFields","level":"info","msg":""}
+{"ErrorMessage":"This is a error message","Method":"GET","Path":"/","file":"/data/code/golang/src/bzhyProjects/sysadmServer/logger.go:474","func":"github.com/wangyysde/sysadmServer.WriteLogWithFields","level":"info","msg":"","time":"2021-09-29 10:35:25"}
+{"ErrorMessage":"This is a error message","Method":"GET","Path":"/","file":"/data/code/golang/src/bzhyProjects/sysadmServer/logger.go:474","func":"github.com/wangyysde/sysadmServer.WriteLogWithFields","level":"info","msg":""}
