@@ -14,7 +14,7 @@
 // @License GNU Lesser General Public License  https://www.sysadm.cn/lgpl.html
 //  @Modified on Jul 15 2021
 
-package ginS
+package sysadmServerS
 
 import (
 	"html/template"

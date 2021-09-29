@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"math"
 	"mime/multipart"
 	"net"
@@ -759,7 +758,6 @@ func (c *Context) ClientIP() string {
 
 	// Legacy "AppEngine" flag
 	if c.engine.AppEngine {
-		log.Println(`The AppEngine flag is going to be deprecated.`)
 		if addr := c.requestHeader("X-Appengine-Remote-Addr"); addr != "" {
 			return addr
 		}

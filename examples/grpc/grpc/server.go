@@ -1,9 +1,10 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"net"
 
+	"github.com/wangyysde/sysadmLog"
 	pb "github.com/wangyysde/sysadmServer/examples/grpc/pb"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -21,7 +22,7 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 func main() {
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		sysadmLog.Log(fmt.Sprintf("failed to listen: %v", err),"fatal")
 	}
 	s := grpc.NewServer()
 	pb.RegisterGreeterServer(s, &server{})
@@ -29,6 +30,6 @@ func main() {
 	// Register reflection service on gRPC server.
 	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		sysadmLog.Log(fmt.Sprintf("Failed to serve: %s", err),"fatal")
 	}
 }

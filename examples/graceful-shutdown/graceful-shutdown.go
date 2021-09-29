@@ -4,13 +4,14 @@ package main
 
 import (
 	"context"
-	"log"
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"github.com/wangyysde/sysadmLog"
 	"github.com/wangyysde/sysadmServer"
 )
 
@@ -30,7 +31,7 @@ func main() {
 	// it won't block the graceful shutdown handling below
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("listen: %s\n", err)
+			sysadmLog.Log(fmt.Sprintf("listen: %s\n", err),"fatal")
 		}
 	}()
 
@@ -42,15 +43,15 @@ func main() {
 	// kill -9 is syscall.SIGKILL but can't be catch, so don't need add it
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
-	log.Println("Shutting down server...")
+	sysadmLog.Log("Shutting down server...","info")
 
 	// The context is used to inform the server it has 5 seconds to finish
 	// the request it is currently handling
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatal("Server forced to shutdown:", err)
+		sysadmLog.Log(fmt.Sprintf("Server forced to shutdown:%s",err),"fatal")
 	}
 	
-	log.Println("Server exiting")
+	sysadmLog.Log("Server exiting")
 }

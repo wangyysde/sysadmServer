@@ -2,12 +2,13 @@ package main
 
 import (
 	"flag"
-	"log"
 	"time"
+	"fmt"
 
 	"github.com/fatih/color"
 	"github.com/wangyysde/sysadmServer"
 	"go.uber.org/ratelimit"
+	"github.com/wangyysde/sysadmLog"
 )
 
 var (
@@ -15,17 +16,12 @@ var (
 	rps   = flag.Int("rps", 5, "request per second")
 )
 
-func init() {
-	log.SetFlags(0)
-	log.SetPrefix("[sysadmServer ")
-	log.SetOutput(sysadmServer.DefaultWriter)
-}
 
 func leakBucket() sysadmServer.HandlerFunc {
 	prev := time.Now()
 	return func(ctx *sysadmServer.Context) {
 		now := limit.Take()
-		log.Print(color.CyanString("%v", now.Sub(prev)))
+		sysadmLog.Log(fmt.Sprintf("%v",color.CyanString("%v", now.Sub(prev)),"info")
 		prev = now
 	}
 }
@@ -40,7 +36,7 @@ func sysadmServerRun(rps int) {
 		ctx.JSON(200, "rate limiting test")
 	})
 
-	log.Printf(color.CyanString("Current Rate Limit: %v requests/s", rps))
+	sysadmLog.Log(color.CyanString("Current Rate Limit: %v requests/s", rps))
 	app.Run(":8080")
 }
 

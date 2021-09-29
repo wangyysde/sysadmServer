@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/wangyysde/sysadmServer"
 	"io"
-	"log"
 	"time"
+
+	"github.com/wangyysde/sysadmServer"
+
+	"github.com/wangyysde/sysadmLog"
 )
 
 //It keeps a list of clients those are currently attached
@@ -95,13 +97,12 @@ func (stream *Event) listen() {
 		// Add new available client
 		case client := <-stream.NewClients:
 			stream.TotalClients[client] = true
-			log.Printf("Client added. %d registered clients", len(stream.TotalClients))
+			sysadmLog.Log(fmt.Sprintf("Client added. %d registered clients", len(stream.TotalClients)),"info" )
 
 		// Remove closed client
 		case client := <-stream.ClosedClients:
 			delete(stream.TotalClients, client)
-			log.Printf("Removed client. %d registered clients", len(stream.TotalClients))
-
+			sysadmLog.Log(fmt.sprintf("Removed client. %d registered clients", len(stream.TotalClients)),"info")
 		// Broadcast message to client
 		case eventMsg := <-stream.Message:
 			for clientMessageChan := range stream.TotalClients {

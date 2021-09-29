@@ -23,7 +23,7 @@ router := sysadmserver.Default()
 cfg := newrelic.NewConfig(os.Getenv("APP_NAME"), os.Getenv("NEW_RELIC_API_KEY"))
 app, err := newrelic.NewApplication(cfg)
 if err != nil {
-		log.Printf("failed to make new_relic app: %v", err)
+		sysadmLog.Log(fmt.Sprintf("failed to make new_relic app: %v", err),"error")
 } else {
 		router.Use(adapters.NewRelicMonitoring(app))
 }

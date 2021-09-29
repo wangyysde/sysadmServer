@@ -3,7 +3,7 @@
 This is a complete example to create a single binary with the
 [wangyysde/sysadmSErver][sysadmServer] Web Server with HTML templates.
 
-[gin]: https://github.com/wangyysde/sysadmServer
+[sysadmServer]: https://github.com/wangyysde/sysadmServer
 
 ## How to use
 

@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
+	"github.com/wangyysde/sysadmLog"
 	"github.com/wangyysde/sysadmServer"
 	pb "github.com/wangyysde/sysadmServer/examples/grpc/pb"
 	"google.golang.org/grpc"
@@ -14,7 +14,7 @@ func main() {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		sysadmLog.Log(fmt.Sprintf("did not connect: %v", err),"fatal")
 	}
 	defer conn.Close()
 	client := pb.NewGreeterClient(conn)
@@ -41,6 +41,6 @@ func main() {
 
 	// Run http server
 	if err := r.Run(":8052"); err != nil {
-		log.Fatalf("could not run server: %v", err)
+		sysadmLog.Log(fmt.Sprintf("could not run server: %v", err),"fatal")
 	}
 }

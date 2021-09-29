@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/wangyysde/sysadmServer"
+	"github.com/wangyysde/sysadmLog"
 )
 
 const (
@@ -25,6 +25,6 @@ func main() {
 	})
 
 	if err := r.Run(Addr); err != nil {
-		log.Printf("Error: %v", err)
+		sysadmLog.Log(fmt.Sprintf("Error: %v", err),"info")
 	}
 }

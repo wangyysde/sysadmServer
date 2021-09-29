@@ -1,9 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
-	"log"
 
+	"github.com/wangyysde/sysadmLog"
 	"github.com/wangyysde/sysadmServer"
 )
 
@@ -28,7 +29,7 @@ func main() {
 		if pusher := c.Writer.Pusher(); pusher != nil {
 			// use pusher.Push() to do server push
 			if err := pusher.Push("/assets/app.js", nil); err != nil {
-				log.Printf("Failed to push: %v", err)
+				sysadmLog.Log(fmt.Sprintf("Failed to push: %v",err),"info")
 			}
 		}
 		c.HTML(200, "https", sysadmServer.H{

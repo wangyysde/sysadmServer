@@ -1,10 +1,11 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 	"time"
 
+	"github.com/wangyysde/sysadmLog"
 	"github.com/wangyysde/sysadmServer"
 	"golang.org/x/sync/errgroup"
 )
@@ -69,6 +70,6 @@ func main() {
 	})
 
 	if err := g.Wait(); err != nil {
-		log.Fatal(err)
+		sysadmLog.Log(fmt.Sprintf("%v", err),"fatal")
 	}
 }

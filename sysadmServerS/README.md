@@ -7,11 +7,11 @@ package main
 
 import (
 	"github.com/wangyysde/sysadmServer"
-	"github.com/wangyysde/sysadmServer/ginS"
+	"github.com/wangyysde/sysadmServer/sysadmServerS"
 )
 
 func main() {
-	ginS.GET("/", func(c *sysadmserver.Context) { c.String(200, "Hello World") })
-	ginS.Run()
+	sysadmServerS.GET("/", func(c *sysadmserver.Context) { c.String(200, "Hello World") })
+	sysadmServerS.Run()
 }
 ```

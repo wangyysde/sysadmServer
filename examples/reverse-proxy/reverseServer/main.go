@@ -2,11 +2,12 @@ package main
 
 import (
 	"bufio"
-	"log"
 	"net/http"
 	"net/url"
+	"fmt"
 
 	"github.com/wangyysde/sysadmServer"
+	"github.com/wangyysde/sysadmLog"
 )
 
 const (
@@ -33,7 +34,7 @@ func main() {
 		req := c.Request
 		proxy, err := url.Parse(getLoadBalanceAddr())
 		if err != nil {
-			log.Printf("error in parse addr: %v", err)
+			sysadmLog.Log(fmt.Sprintf("error in parse addr: %v", err),"info")
 			c.String(500, "error")
 			return
 		}
@@ -44,7 +45,7 @@ func main() {
 		transport := http.DefaultTransport
 		resp, err := transport.RoundTrip(req)
 		if err != nil {
-			log.Printf("error in roundtrip: %v", resp)
+			sysadmLog.Log(fmt.Sprintf("error in roundtrip: %v", resp),"info")
 			c.String(500, "error")
 			return
 		}
@@ -61,6 +62,6 @@ func main() {
 	})
 
 	if err := r.Run(ReverseServerAddr); err != nil {
-		log.Printf("Error: %v", err)
+		sysadmLog.Log(fmt.Sprintf("Error: %v", err),"error")
 	}
 }

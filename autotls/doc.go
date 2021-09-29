@@ -3,10 +3,10 @@
 // 	package main
 //
 // 	import (
-// 		"log"
 //
 // 		"github.com/wangyysde/sysadmServer/autotls"
 // 		"github.com/wangyysde/sysadmServer"
+//		"github.com/wangyysde/sysadmLog"
 // 	)
 //
 // 	func main() {
@@ -17,7 +17,7 @@
 // 			c.String(200, "pong")
 // 		})
 //
-// 		log.Fatal(autotls.Run(r, "example1.com", "example2.com"))
+//	    sysadmLog.Log(autotls.Run(r, "example1.com", "example2.com"),"fatal")
 // 	}
 //
 package autotls

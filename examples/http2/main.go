@@ -2,10 +2,9 @@ package main
 
 import (
 	"html/template"
-	"log"
 	"net/http"
-	"os"
 
+	"github.com/wangyysde/sysadmLog"
 	"github.com/wangyysde/sysadmServer"
 )
 
@@ -21,8 +20,7 @@ var html = template.Must(template.New("https").Parse(`
 `))
 
 func main() {
-	logger := log.New(os.Stderr, "", 0)
-	logger.Println("[WARNING] DON'T USE THE EMBED CERTS FROM THIS EXAMPLE IN PRODUCTION ENVIRONMENT, GENERATE YOUR OWN!")
+	sysadmLog.Log("[WARNING] DON'T USE THE EMBED CERTS FROM THIS EXAMPLE IN PRODUCTION ENVIRONMENT, GENERATE YOUR OWN!","info")
 
 	r := sysadmServer.Default()
 	r.SetHTMLTemplate(html)

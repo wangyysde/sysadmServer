@@ -2,14 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/wangyysde/sysadmServer"
-	"log"
 	"net/http"
 	"time"
+
+	"github.com/wangyysde/sysadmServer"
 )
 
 func main(){
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	r := sysadmServer.Default()
 	r.GET("/test_stream", func(c *sysadmServer.Context){
 		w := c.Writer

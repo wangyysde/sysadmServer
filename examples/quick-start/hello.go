@@ -1,11 +1,12 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"os"
+	"fmt"
 
 	"github.com/wangyysde/sysadmServer"
+	"github.com/wangyysde/sysadmLog"
 )
 
 func main() {
@@ -13,7 +14,7 @@ func main() {
 
 	if port == "" {
 		port = "8080"
-		log.Printf("Defaulting to port %s", port)
+		sysadmLog.Log(fmt.Sprintf("Defaulting to port %s", port),"info")
 	}
 
 	// Starts a new sysadmServer instance with no middle-ware
