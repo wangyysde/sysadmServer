@@ -39,3 +39,15 @@ time=2021-09-29T17:18:18+08:00 level=error Method=GET ErrorMessage=This is a tes
 time=2021-09-29 17:18:18 level=error Path=/ Method=GET ErrorMessage=This is a error message
 {"ErrorMessage":"This is a error message","Method":"GET","Path":"/","level":"error","msg":"","time":"2021-09-29 17:18:18"}
 {"ErrorMessage":"This is a error message","Method":"GET","Path":"/","level":"error","msg":"","time":"2021-09-29 17:18:18"}
+time=2021-10-11T21:02:01+08:00 level=error ErrorMessage=This is a test default error message Path=/ Method=GET
+time=2021-10-11 21:02:01 level=error Path=/ Method=GET ErrorMessage=This is a error message
+{"ErrorMessage":"This is a error message","Method":"GET","Path":"/","level":"error","msg":"","time":"2021-10-11 21:02:01"}
+{"ErrorMessage":"This is a error message","Method":"GET","Path":"/","level":"error","msg":"","time":"2021-10-11 21:02:01"}
+time=2021-10-11T21:07:29+08:00 level=error ErrorMessage=This is a test default error message Path=/ Method=GET
+time=2021-10-11 21:07:29 level=error ErrorMessage=This is a error message Path=/ Method=GET
+{"ErrorMessage":"This is a error message","Method":"GET","Path":"/","level":"error","msg":"","time":"2021-10-11 21:07:29"}
+{"ErrorMessage":"This is a error message","Method":"GET","Path":"/","level":"error","msg":"","time":"2021-10-11 21:07:29"}
+time=2021-10-11T21:10:22+08:00 level=error ErrorMessage=This is a test default error message Path=/ Method=GET
+time=2021-10-11 21:10:22 level=error ErrorMessage=This is a error message Path=/ Method=GET
+{"ErrorMessage":"This is a error message","Method":"GET","Path":"/","level":"error","msg":"","time":"2021-10-11 21:10:22"}
+{"ErrorMessage":"This is a error message","Method":"GET","Path":"/","level":"error","msg":"","time":"2021-10-11 21:10:22"}

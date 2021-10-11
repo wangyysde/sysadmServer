@@ -1,10 +1,10 @@
 package main
 
 import (
-	"log"
+	"fmt"
 
-	"github.com/wangyysde/sysadmServer/autotls"
 	"github.com/wangyysde/sysadmServer"
+	"github.com/wangyysde/sysadmServer/autotls"
 	"golang.org/x/crypto/acme/autocert"
 )
 
@@ -22,5 +22,5 @@ func main() {
 		Cache:      autocert.DirCache("/var/www/.cache"),
 	}
 
-	log.Fatal(autotls.RunWithManager(r, &m))
+	sysadmServer.Log(fmt.Sprintf("%s",autotls.RunWithManager(r, &m)),"info")
 }

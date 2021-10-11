@@ -1,10 +1,10 @@
 package main
 
 import (
-	"log"
+	"fmt"
 
-	"github.com/wangyysde/sysadmServer/autotls"
 	"github.com/wangyysde/sysadmServer"
+	"github.com/wangyysde/sysadmServer/autotls"
 )
 
 func main() {
@@ -15,5 +15,5 @@ func main() {
 		c.String(200, "pong")
 	})
 
-	log.Fatal(autotls.Run(r, "harbor.sysadm.cn"))
+	sysadmServer.Log(fmt.Sprintf("%s",autotls.Run(r, "harbor.sysadm.cn")),"info")
 }

@@ -14,7 +14,7 @@ func main() {
 
 	if port == "" {
 		port = "8080"
-		sysadmLog.Log(fmt.Sprintf("Defaulting to port %s", port),"info")
+		sysadmServer.Log(fmt.Sprintf("Defaulting to port %s", port),"info")
 	}
 
 	// Starts a new sysadmServer instance with no middle-ware
@@ -29,6 +29,6 @@ func main() {
 	})
 
 	// Listen and serve on defined port
-	log.Printf("Listening on port %s", port)
+	sysadmServer.Log(fmt.Sprintf("Listening on port %s", port),"info")
 	r.Run(":" + port)
 }
