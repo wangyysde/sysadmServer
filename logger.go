@@ -775,3 +775,66 @@ func (*Engine)Log(message string, logLevel string){
 	Log(message, logLevel )
 }
 
+
+// Logf log message to DefaultLogger, AccessLogger and ErrorLogger. 
+// if SplitAccessAndError is true, then log info log message to AccessLogger and other log message to ErrorLogger.
+// otherwise  all log message will be log to AccessLogger.  If  SplitAccessAndError is true but ErrorLogger is nil 
+// then all log message will be log to AccessLogger and a additional warning log message will be log to AccessLogger.
+// If SplitAccessAndError is false but AccessLogger is nil then all log message will be log to ErrorLogger and a additional 
+// warning log message will be log to ErrorLogger.
+func Logf(logLevel string , format string , a ...interface{}){
+	if strings.TrimSpace(logLevel) == "" {		
+		logLevel = "info"
+	}
+
+	found := false
+	for _,value := range Levels {
+		if strings.ToLower(logLevel) == strings.ToLower(value) {
+			found = true
+		}
+	}
+	
+	if !found {
+		logLevel = "info"
+	}
+	
+	logMsg := fmt.Sprintf(format, a...)
+	logger := LoggerConfigVar.DefaultLogger
+	if logger != nil {
+		WriteLog(logger,logMsg,logLevel)
+	}
+
+	accessLogger := LoggerConfigVar.AccessLogger
+	errorLogger := LoggerConfigVar.ErrorLogger
+
+	if  strings.ToLower(logLevel) == "info" {
+		if  accessLogger != nil {
+			WriteLog(accessLogger,logMsg,logLevel)
+		}
+	} else {
+		if LoggerConfigVar.SplitAccessAndError {
+			if errorLogger != nil {
+				WriteLog(errorLogger,logMsg,logLevel)
+			} else if accessLogger != nil {
+				WriteLog(accessLogger,logMsg,logLevel)
+				logLevel = "warning"
+				WriteLog(accessLogger,"SplitAccessAndError has be set to true, but  error log file has not be set.",logLevel)
+			}
+		} else {
+			if accessLogger != nil {
+				WriteLog(accessLogger,logMsg,logLevel)
+			} else if errorLogger != nil {
+				WriteLog(errorLogger,logMsg,logLevel)
+				logLevel = "warning"
+				WriteLog(errorLogger,"SplitAccessAndError has be set to false, but  access log file has not be set.",logLevel)
+			}
+		}
+	}
+
+}
+
+// (*Engine)Logf is the method to Log function
+func (*Engine)Logf(logLevel string , format string , a ...interface{}){
+	Logf(logLevel,format, a... )
+}
+
