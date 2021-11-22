@@ -17,7 +17,6 @@
 package sysadmServer
 
 import (
-	"fmt"
 	"html/template"
 	"runtime"
 	"strconv"
