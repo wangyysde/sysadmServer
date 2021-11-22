@@ -64,7 +64,7 @@ func debugPrint(format string, values ...interface{}) {
 		if !strings.HasSuffix(format, "\n") {
 			format += "\n"
 		}
-		fmt.Fprintf(DefaultWriter, format, values...)
+		Logf("debug",format, values ...)
 	}
 }
 
@@ -79,17 +79,17 @@ func getMinVer(v string) (uint64, error) {
 
 func debugPrintWARNINGDefault() {
 	if v, e := getMinVer(runtime.Version()); e == nil && v <= sysadmServerSupportMinGoVer {
-		debugPrint(`[WARNING] Now sysadmServer requires Go 1.13+.
+		debugPrint(`Now sysadmServer requires Go 1.13+.
 
 `)
 	}
-	debugPrint(`[WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+	debugPrint(`Creating an Engine instance with the Logger and Recovery middleware already attached.
 
 `)
 }
 
 func debugPrintWARNINGNew() {
-	debugPrint(`[WARNING] Running in "debug" mode. Switch to "release" mode in production.
+	debugPrint(`Running in "debug" mode. Switch to "release" mode in production.
  - using env:	export SYSADMSERVER_MODE=release
  - using code:	sysadmServer.SetMode(sysadmServer.ReleaseMode)
 
@@ -97,7 +97,7 @@ func debugPrintWARNINGNew() {
 }
 
 func debugPrintWARNINGSetHTMLTemplate() {
-	debugPrint(`[WARNING] Since SetHTMLTemplate() is NOT thread-safe. It should only be called
+	debugPrint(`Since SetHTMLTemplate() is NOT thread-safe. It should only be called
 at initialization. ie. before any route is registered or the router is listening in a socket:
 
 	router := sysadmServer.Default()
@@ -108,6 +108,6 @@ at initialization. ie. before any route is registered or the router is listening
 
 func debugPrintError(err error) {
 	if err != nil && IsDebugging() {
-		fmt.Fprintf(DefaultErrorWriter, "[ERROR] %v\n", err)
+		Logf("error","%v",err)
 	}
 }
