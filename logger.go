@@ -623,11 +623,6 @@ func WriteLog(logger *log.Logger, message string, logLevel string){
 	case "error":
 		logger.Error(message)
 	case "fatal":
-		fd := logger.Out
-		switch v := fd.(type) {
-		case *os.File:
-			_ = v.Close()
-		}
 		logger.Fatal(message) 
 	case "panic":
 		logger.Panic(message)  
