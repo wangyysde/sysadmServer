@@ -299,6 +299,34 @@ func SetAccessLogFile(file string) (func (fd *os.File) error, *os.File, error) {
 	return retFun, fp, nil
 }
 
+
+// SetAccessLoggerWithFp set fp(writer) to access logger 
+// the function which close the fp should be called by defer following this function calling 
+func SetAccessLoggerWithFp(fp *os.File) (error) {
+	if fp == nil {
+		return  fmt.Errorf("can not set nil(writer) to logger")
+	}
+	
+	logger := log.New()
+	logger.Out = fp
+	if LoggerConfigVar.AccessLogger != nil {
+		oldfp := LoggerConfigVar.AccessLogger.Out
+		switch v := oldfp.(type) {
+		case *os.File:
+			_ = v.Close()
+		default:
+			LoggerConfigVar.AccessLogger.Out = nil
+		}
+	}
+
+	LoggerConfigVar.AccessLogger = logger
+
+	setLoggerLevel()
+	setLoggerKind()
+
+	return nil
+}
+
 // (*Engine)SetAccessLogFile is a method to SetAccessLogFile function
 func (*Engine)SetAccessLogFile(file string) (func (fd *os.File) error, *os.File, error) {
 	return SetAccessLogFile(file)
@@ -344,6 +372,33 @@ func SetErrorLogFile(file string) (func (fd *os.File) error, *os.File, error) {
 	}
 
 	return retFun, fp, nil
+}
+
+// SetErrorLoggerWithFp set fp(writer) to error logger 
+// the function which close the fp should be called by defer following this function calling 
+func SetErrorLoggerWithFp(fp *os.File) (error) {
+	if fp == nil {
+		return  fmt.Errorf("can not set nil(writer) to logger")
+	}
+	
+	logger := log.New()
+	logger.Out = fp
+	if LoggerConfigVar.AccessLogger != nil {
+		oldfp := LoggerConfigVar.ErrorLogger.Out
+		switch v := oldfp.(type) {
+		case *os.File:
+			_ = v.Close()
+		default:
+			LoggerConfigVar.ErrorLogger.Out = nil
+		}
+	}
+
+	LoggerConfigVar.ErrorLogger = logger
+
+	setLoggerLevel()
+	setLoggerKind()
+
+	return nil
 }
 
 // (*Engine)SetErrorLogFile is a method to SetErrorLogFile function

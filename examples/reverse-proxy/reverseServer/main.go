@@ -7,19 +7,21 @@ import (
 	"fmt"
 
 	"github.com/wangyysde/sysadmServer"
-	"github.com/wangyysde/sysadmLog"
 )
 
 const (
 	// this is our reverse server ip address
-	ReverseServerAddr = "127.0.0.1:2002"
+	ReverseServerAddr = "0.0.0.0:2002"
 )
 
 var (
 	// maybe we can have many real server addresses and do some load balanced strategy.
-	RealAddr = []string{
-		"http://127.0.0.1:2003",
-	}
+	// RealAddr = []string{
+	// 	"https://127.0.0.1:2003",
+	// }
+    RealAddr = []string{
+      "https://www.163.com",
+   }
 )
 
 // a fake function that we can do strategy here.
@@ -34,7 +36,7 @@ func main() {
 		req := c.Request
 		proxy, err := url.Parse(getLoadBalanceAddr())
 		if err != nil {
-			sysadmLog.Log(fmt.Sprintf("error in parse addr: %v", err),"info")
+			fmt.Sprintf("error in parse addr: %v", err)
 			c.String(500, "error")
 			return
 		}
@@ -45,7 +47,7 @@ func main() {
 		transport := http.DefaultTransport
 		resp, err := transport.RoundTrip(req)
 		if err != nil {
-			sysadmLog.Log(fmt.Sprintf("error in roundtrip: %v", resp),"info")
+		   fmt.Sprintf("error in roundtrip: %v", resp)
 			c.String(500, "error")
 			return
 		}
@@ -62,6 +64,6 @@ func main() {
 	})
 
 	if err := r.Run(ReverseServerAddr); err != nil {
-		sysadmLog.Log(fmt.Sprintf("Error: %v", err),"error")
+		fmt.Sprintf("Error: %v", err)
 	}
 }
