@@ -307,22 +307,13 @@ func SetAccessLoggerWithFp(fp *os.File) (error) {
 		return  fmt.Errorf("can not set nil(writer) to logger")
 	}
 	
-	logger := log.New()
-	logger.Out = fp
-	if LoggerConfigVar.AccessLogger != nil {
-		oldfp := LoggerConfigVar.AccessLogger.Out
-		switch v := oldfp.(type) {
-		case *os.File:
-			_ = v.Close()
-		default:
-			LoggerConfigVar.AccessLogger.Out = nil
-		}
+	if LoggerConfigVar.AccessLogger == nil {
+		logger := log.New()
+		logger.Out = fp
+		LoggerConfigVar.AccessLogger = logger
+		setLoggerLevel()
+		setLoggerKind()
 	}
-
-	LoggerConfigVar.AccessLogger = logger
-
-	setLoggerLevel()
-	setLoggerKind()
 
 	return nil
 }
@@ -380,23 +371,14 @@ func SetErrorLoggerWithFp(fp *os.File) (error) {
 	if fp == nil {
 		return  fmt.Errorf("can not set nil(writer) to logger")
 	}
-	
-	logger := log.New()
-	logger.Out = fp
-	if LoggerConfigVar.AccessLogger != nil {
-		oldfp := LoggerConfigVar.ErrorLogger.Out
-		switch v := oldfp.(type) {
-		case *os.File:
-			_ = v.Close()
-		default:
-			LoggerConfigVar.ErrorLogger.Out = nil
-		}
+
+	if LoggerConfigVar.ErrorLogger == nil {
+		logger := log.New()
+		logger.Out = fp
+		LoggerConfigVar.ErrorLogger = logger
+		setLoggerLevel()
+		setLoggerKind()
 	}
-
-	LoggerConfigVar.ErrorLogger = logger
-
-	setLoggerLevel()
-	setLoggerKind()
 
 	return nil
 }
